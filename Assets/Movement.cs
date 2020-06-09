@@ -5,16 +5,25 @@ using UnityEngine.InputSystem;
 
 public class Movement : MonoBehaviour
 {
-    public float speed = 10f;
+    
 
     [SerializeField]
     private int playerindex = 0;
 
     public Vector2 inputVector;
 
-    private void Awake()
-    {
-    }
+    [SerializeField]
+    float moveDrag;
+    [SerializeField]
+    float acceleration;
+    public float maxSpeed = 10f;
+    [SerializeField]
+    float minSpeed;    
+    [SerializeField]
+    float turnAcceleration;
+
+    float speed;
+    float turnSpeed;
 
     public int GetPlayerIndex()
     {
@@ -22,6 +31,20 @@ public class Movement : MonoBehaviour
     }
     private void Update()
     {
-        transform.Translate(inputVector*Time.deltaTime*speed);
+        speed += inputVector.y * acceleration * Time.deltaTime ;
+        if (Mathf.Abs(speed) > maxSpeed)
+            speed = maxSpeed;
+        transform.Translate(Vector2.up * speed, Space.Self);
+
+        speed *= moveDrag;
+        if (Mathf.Abs(speed) <= minSpeed  && inputVector.y == 0)
+            speed = 0;
+
+        turnSpeed += inputVector.x * turnAcceleration * Time.deltaTime;
+
+        transform.Rotate(Vector3.back * turnSpeed);
+        turnSpeed *= moveDrag;
+        if (Mathf.Abs(speed) <= minSpeed && inputVector.y == 0)
+            speed = 0;
     }
 }
