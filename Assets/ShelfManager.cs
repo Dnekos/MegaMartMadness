@@ -5,7 +5,7 @@ using UnityEngine;
 public class ShelfManager : MonoBehaviour
 {
     [SerializeField]
-    int item_index;
+    public int item_index;
     StoreItem stocked_item;
 
     [SerializeField]
@@ -18,10 +18,15 @@ public class ShelfManager : MonoBehaviour
 
     private void Start()
     {
-        stocked_item = new StoreItem(item_index);
+        
         if (item_index != 0)
         {
+            stocked_item = new StoreItem(item_index);
             filled = true;
+            if (filledimage == null)
+            {
+                filledimage = stocked_item.image;
+            }
             gameObject.GetComponent<SpriteRenderer>().sprite = filledimage;
         }
         else
@@ -37,8 +42,14 @@ public class ShelfManager : MonoBehaviour
             {
                 filled = false;
                 player.items++;
-                gameObject.GetComponent<SpriteRenderer>().sprite = emptyimage;
                 Debug.Log("grabbed");
+
+                //
+                if (emptyimage == null)
+                    Destroy(gameObject);
+                else
+                    gameObject.GetComponent<SpriteRenderer>().sprite = emptyimage;
+
             }
         }
     }

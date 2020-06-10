@@ -16,14 +16,17 @@ public class ItemManager : MonoBehaviour
     SpriteRenderer mid;
     [SerializeField]
     SpriteRenderer top;
-    
+
+    [SerializeField]
+    GameObject droppeditem;
+
     public bool AddItem(StoreItem item)
     {
         if (items.Count < maxItems)
         {
             items.Add(item);
             Debug.Log(items.Count);
-            switch ( items.Count)
+            switch (items.Count)
             {
                 case 1:
                     bottom.transform.Rotate(Vector3.back * Random.Range(0, 360));
@@ -41,6 +44,16 @@ public class ItemManager : MonoBehaviour
             return true;
         }
         return false;
+    }
+    public void DropItem()
+    {
+        if (items.Count > 0)
+        {
+            int item = RemoveTop().index;
+            droppeditem.GetComponent<ShelfManager>().item_index = item;
+            Instantiate(droppeditem, transform.position, transform.rotation);
+        }
+
     }
     public StoreItem RemoveTop()
     {
