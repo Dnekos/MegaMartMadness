@@ -22,6 +22,14 @@ public class InputHandler : MonoBehaviour
     public void OnMove(CallbackContext context)
     {
         if (mover != null)
-        mover.inputVector = context.ReadValue<Vector2>(); 
+        {
+            mover.inputVector = context.ReadValue<Vector2>();
+        }
+    }
+
+    public void OnGrab(CallbackContext context)
+    {
+        if (mover != null)
+            mover.grab = context.ReadValue<float>();
     }
 }

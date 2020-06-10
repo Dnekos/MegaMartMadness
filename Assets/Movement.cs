@@ -5,18 +5,23 @@ using UnityEngine.InputSystem;
 
 public class Movement : MonoBehaviour
 {
-    
+    public int items = 0;
+
+
+
 
     [SerializeField]
     private int playerindex = 0;
 
     public Vector2 inputVector;
+    public float grab = 0;
 
     [SerializeField]
     float moveDrag;
     [SerializeField]
     float acceleration;
-    public float maxSpeed = 10f;
+    [SerializeField]
+    float maxSpeed = 10f;
     [SerializeField]
     float minSpeed;    
     [SerializeField]
@@ -44,6 +49,10 @@ public class Movement : MonoBehaviour
 
         transform.Rotate(Vector3.back * turnSpeed);
         turnSpeed *= moveDrag;
+        if (speed < 0 && turnSpeed < 0)
+            turnSpeed = Mathf.Abs(turnSpeed) * -1;
+        else if (speed < 0 && turnSpeed > 0)
+            turnSpeed = Mathf.Abs(turnSpeed);
         if (Mathf.Abs(speed) <= minSpeed && inputVector.y == 0)
             speed = 0;
     }
