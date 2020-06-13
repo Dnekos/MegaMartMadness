@@ -104,6 +104,21 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: c5c9dd2e-aa11-4072-89b5-d40eef563175
     m_ActionName: Gameplay/Drop[/Keyboard/q]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 818393933282761279}
+        m_MethodName: onCamMove
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: a7ca9c27-fd86-423f-b846-793a0bcbc5aa
+    m_ActionName: Gameplay/Camera
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Gameplay
@@ -121,6 +136,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22615fd87a10aba458bae3a6f9237b4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cam: {fileID: 112486741901600436}
+  camera_dist: 10
 --- !u!1 &6962176092457455658
 GameObject:
   m_ObjectHideFlags: 0
@@ -147,7 +164,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6962176092457455658}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5.104087, y: -1.4236636, z: -18.496878}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8643560790096449313}

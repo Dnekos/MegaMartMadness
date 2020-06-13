@@ -9,9 +9,15 @@ public class InputHandler : MonoBehaviour
 {
     private Movement mover;
     private ItemManager inventory;
+    private Transform player;
     private PlayerInput input;
+    [SerializeField]
+    private Transform cam;
 
     bool drop_lifted = true;
+    [SerializeField]
+    float camera_dist;
+    Vector2 cam_position;
 
     // Start is called before the first frame update
     private void Awake()
@@ -21,9 +27,23 @@ public class InputHandler : MonoBehaviour
         var movers = FindObjectsOfType<Movement>();
         mover = movers.FirstOrDefault(m => m.GetPlayerIndex() == index);
         inventory = mover.GetComponent<ItemManager>();
+        player = mover.transform;
     }
 
     // Update is called once per frame
+    private void Update()
+    {
+        transform.position = player.position;
+        //cam.localPosition = new Vector3(cam_position.x * camera_dist, cam_position.y * camera_dist, -10);
+
+    }
+
+    public void onCamMove(CallbackContext context)
+    {
+        cam.localPosition = new Vector3(context.ReadValue<Vector2>().x * camera_dist, context.ReadValue<Vector2>().y * camera_dist, -10);
+        //cam_position = context.ReadValue<Vector2>();
+    }
+
     public void OnMove(CallbackContext context)
     {
         if (mover != null)

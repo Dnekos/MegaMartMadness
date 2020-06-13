@@ -29,21 +29,28 @@ public class Movement : MonoBehaviour
 
     float speed;
     float turnSpeed;
+    float velocity;
 
     public int GetPlayerIndex()
     {
         return playerindex;
     }
-    private void Update()
+
+    private void FixedUpdate()
     {
-        speed += inputVector.y * acceleration * Time.deltaTime ;
+        Debug.Log("garf");
+
+        speed += inputVector.y * (acceleration * Time.deltaTime);
+
         if (Mathf.Abs(speed) > maxSpeed)
             speed = maxSpeed;
         transform.Translate(Vector2.up * speed, Space.Self);
-
-        speed *= moveDrag;
-        if (Mathf.Abs(speed) <= minSpeed  && inputVector.y == 0)
+        Debug.Log(moveDrag);
+        speed = speed * moveDrag;
+        if (Mathf.Abs(speed) <= minSpeed && inputVector.y == 0)
             speed = 0;
+
+        Debug.Log(speed);
 
         turnSpeed += inputVector.x * turnAcceleration * Time.deltaTime;
 
@@ -55,5 +62,10 @@ public class Movement : MonoBehaviour
             turnSpeed = Mathf.Abs(turnSpeed);
         if (Mathf.Abs(speed) <= minSpeed && inputVector.y == 0)
             speed = 0;
+    }
+
+    private void Update()
+    {
+        
     }
 }
