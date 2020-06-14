@@ -38,14 +38,12 @@ public class Movement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Debug.Log("garf");
-
         speed += inputVector.y * (acceleration * Time.deltaTime);
 
         if (Mathf.Abs(speed) > maxSpeed)
             speed = maxSpeed;
         transform.Translate(Vector2.up * speed, Space.Self);
-        Debug.Log(moveDrag);
+
         speed = speed * moveDrag;
         if (Mathf.Abs(speed) <= minSpeed && inputVector.y == 0)
             speed = 0;
