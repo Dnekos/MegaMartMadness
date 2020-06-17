@@ -8,7 +8,7 @@ public class RoundManager : MonoBehaviour
     [SerializeField]
     int roundTime = 180;
 
-    public int[] player_scores = { 0, 0, 0, 0 };
+    public Dictionary<int,int> player_scores = new Dictionary<int, int>() { { 0, 0 }, { 1, 0 }, { 2, 0 }, { 3, 0 } };
 
     // Start is called before the first frame update
     void Start()
@@ -19,5 +19,6 @@ public class RoundManager : MonoBehaviour
     public void EndRound()
     {
         gameState = "Round_End";
+        FindObjectOfType<ScoreDisplay>().DisplayScores(player_scores);
     }
 }
