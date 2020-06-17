@@ -14,7 +14,6 @@ public class InputHandler : MonoBehaviour
     [SerializeField]
     private Transform cam;
 
-    bool drop_lifted = true;
     [SerializeField]
     float camera_dist;
     Vector2 cam_position;
@@ -35,7 +34,6 @@ public class InputHandler : MonoBehaviour
     {
         transform.position = player.position;
         //cam.localPosition = new Vector3(cam_position.x * camera_dist, cam_position.y * camera_dist, -10);
-
     }
 
     public void onCamMove(CallbackContext context)
@@ -58,17 +56,29 @@ public class InputHandler : MonoBehaviour
             mover.grab = context.ReadValue<float>();
     }
 
+    public void OnSell(CallbackContext context)
+    {
+        if (mover != null)
+        {
+            Debug.Log("pee haha");
+
+            if (context.ReadValue<float>() == 1 && inventory.atRegister)
+                inventory.selling = true;
+            else
+            {
+                inventory.selling = false;
+            }
+        }
+    }
+
     public void OnDrop(CallbackContext context)
     {
         if (mover != null)
         {
-            if (context.ReadValue<float>() == 1 && drop_lifted == true)
+            if (context.ReadValue<float>() == 1 && !inventory.atRegister)
             {
                 inventory.DropItem();
-                drop_lifted = false;
             }
-            else if (context.ReadValue<float>() == 0)
-                drop_lifted = true;
         }
     }
 }

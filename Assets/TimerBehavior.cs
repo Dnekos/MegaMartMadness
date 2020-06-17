@@ -7,32 +7,33 @@ public class TimerBehavior : MonoBehaviour
 {
     public float timeRemaining = 10;
     public bool timerIsRunning = false;
-    public Text timeText;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        timerIsRunning = true;
-    }
+    [SerializeField]
+    Text timeText;
 
     // Update is called once per frame
     void Update()
     {
-        DisplayTime(timeRemaining);
 
         if (timerIsRunning)
         {
-            if (timeRemaining > 0)
-            {
-                timeRemaining -= Time.deltaTime;
-            }
-            else
+            DisplayTime(timeRemaining);
+
+            timeRemaining -= Time.deltaTime;
+            if (timeRemaining <= 0)
             {
                 Debug.Log("Time has run out!");
-                timeRemaining = 0;
                 timerIsRunning = false;
+                GetComponent<RoundManager>().EndRound();
             }
         }
+        else
+            timeText.text = "";
+    }
+
+    public void StartTimer(int seconds)
+    {
+        timeRemaining = seconds;
+        timerIsRunning = true;
     }
 
     void DisplayTime(float timeToDisplay)

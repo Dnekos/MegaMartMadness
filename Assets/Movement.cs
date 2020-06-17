@@ -48,8 +48,6 @@ public class Movement : MonoBehaviour
         if (Mathf.Abs(speed) <= minSpeed && inputVector.y == 0)
             speed = 0;
 
-        Debug.Log(speed);
-
         turnSpeed += inputVector.x * turnAcceleration * Time.deltaTime;
 
         transform.Rotate(Vector3.back * turnSpeed);
@@ -60,10 +58,5 @@ public class Movement : MonoBehaviour
             turnSpeed = Mathf.Abs(turnSpeed);
         if (Mathf.Abs(speed) <= minSpeed && inputVector.y == 0)
             speed = 0;
-    }
-
-    private void Update()
-    {
-        
     }
 }

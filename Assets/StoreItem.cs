@@ -10,8 +10,6 @@ public class StoreItem
     public StoreItem(int i)
     {
         index = i;
-        Debug.Log(i);
-        Debug.Log("worm");
         point_value = 100; 
         switch (i)
         {

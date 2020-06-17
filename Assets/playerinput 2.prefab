@@ -119,6 +119,21 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: a7ca9c27-fd86-423f-b846-793a0bcbc5aa
     m_ActionName: Gameplay/Camera
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 818393933282761279}
+        m_MethodName: OnSell
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: a6de97ce-347e-45ee-a5f8-2b66a4d091a6
+    m_ActionName: Gameplay/Sell[/DualShock4GamepadHID/buttonNorth,/Keyboard/q]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Gameplay
