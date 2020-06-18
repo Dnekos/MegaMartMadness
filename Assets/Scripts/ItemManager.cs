@@ -10,6 +10,7 @@ public class ItemManager : MonoBehaviour
     [SerializeField]
     int maxItems = 3;
 
+    //cart sprites
     [SerializeField]
     SpriteRenderer bottom;
     [SerializeField]
@@ -19,6 +20,49 @@ public class ItemManager : MonoBehaviour
 
     [SerializeField]
     GameObject droppeditem;
+
+    //register stuff
+    public bool atRegister;
+    public bool selling;
+    float selltimer = 0;
+    [SerializeField]
+    float max_selltime = 2f;
+    [SerializeField]
+    Transform healthbar;
+
+    RoundManager round;
+
+    private void Awake()
+    {
+        round = FindObjectsOfType<RoundManager>()[0];
+    }
+
+    private void Update()
+    {
+        if (selling && items.Count > 0)
+        {
+            selltimer += Time.deltaTime;
+
+            healthbar.parent.gameObject.SetActive(true);
+            healthbar.parent.rotation = Quaternion.Euler(0, 0, 0);
+
+            //setting the filling to go form one end to the other
+            healthbar.localScale = new Vector3(selltimer / max_selltime, healthbar.localScale.y, healthbar.localScale.z);
+            healthbar.localPosition = new Vector3(0.5f * (selltimer / max_selltime) -0.5f, healthbar.localPosition.y, healthbar.localPosition.z);
+            if(selltimer >= max_selltime)
+            {
+                Debug.Log("bleh");
+                round.player_scores[GetComponent<Movement>().GetPlayerIndex()] += RemoveTop().point_value;
+
+                selltimer = 0;
+            }
+        }
+        else
+        {
+            selltimer = 0;
+            healthbar.parent.gameObject.SetActive(false);  
+        }
+    }
 
     public bool AddItem(StoreItem item)
     {
@@ -45,6 +89,7 @@ public class ItemManager : MonoBehaviour
         }
         return false;
     }
+
     public void DropItem()
     {
         if (items.Count > 0)
@@ -55,6 +100,7 @@ public class ItemManager : MonoBehaviour
         }
 
     }
+
     public StoreItem RemoveTop()
     {
         switch (items.Count)

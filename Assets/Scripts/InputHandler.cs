@@ -7,17 +7,20 @@ using UnityEngine.InputSystem;
 
 public class InputHandler : MonoBehaviour
 {
+    //for communicating to player
     private Movement mover;
     private ItemManager inventory;
     private Transform player;
     private PlayerInput input;
+    private RoundManager game;
+
+    //camera stuff
     [SerializeField]
     private Transform cam;
-
-    bool drop_lifted = true;
     [SerializeField]
     float camera_dist;
     Vector2 cam_position;
+
 
     // Start is called before the first frame update
     private void Awake()
@@ -28,6 +31,9 @@ public class InputHandler : MonoBehaviour
         mover = movers.FirstOrDefault(m => m.GetPlayerIndex() == index);
         inventory = mover.GetComponent<ItemManager>();
         player = mover.transform;
+
+        //round manager to know current gamestate
+        game = FindObjectOfType<RoundManager>();
     }
 
     // Update is called once per frame
@@ -35,7 +41,6 @@ public class InputHandler : MonoBehaviour
     {
         transform.position = player.position;
         //cam.localPosition = new Vector3(cam_position.x * camera_dist, cam_position.y * camera_dist, -10);
-
     }
 
     public void onCamMove(CallbackContext context)
@@ -46,7 +51,7 @@ public class InputHandler : MonoBehaviour
 
     public void OnMove(CallbackContext context)
     {
-        if (mover != null)
+        if (mover != null && game.gameState != "Round_End")
         {
             mover.inputVector = context.ReadValue<Vector2>();
         }
@@ -54,21 +59,33 @@ public class InputHandler : MonoBehaviour
 
     public void OnGrab(CallbackContext context)
     {
-        if (mover != null)
+        if (mover != null && game.gameState != "Round_End")
             mover.grab = context.ReadValue<float>();
+    }
+
+    public void OnSell(CallbackContext context)
+    {
+        if (mover != null && game.gameState != "Round_End")
+        {
+            Debug.Log("pee haha");
+
+            if (context.ReadValue<float>() == 1 && inventory.atRegister)
+                inventory.selling = true;
+            else
+            {
+                inventory.selling = false;
+            }
+        }
     }
 
     public void OnDrop(CallbackContext context)
     {
-        if (mover != null)
+        if (mover != null && game.gameState != "Round_End")
         {
-            if (context.ReadValue<float>() == 1 && drop_lifted == true)
+            if (context.ReadValue<float>() == 1 && !inventory.atRegister)
             {
                 inventory.DropItem();
-                drop_lifted = false;
             }
-            else if (context.ReadValue<float>() == 0)
-                drop_lifted = true;
         }
     }
 }
