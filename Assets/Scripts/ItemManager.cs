@@ -31,10 +31,12 @@ public class ItemManager : MonoBehaviour
     Transform healthbar;
 
     RoundManager round;
+    public int p_index;
 
-    private void Awake()
+    private void Start()
     {
         round = FindObjectsOfType<RoundManager>()[0];
+        //p_index = GetComponent<InputHandler>().playerConfig.playerIndex;
     }
 
     private void Update()
@@ -52,7 +54,7 @@ public class ItemManager : MonoBehaviour
             if(selltimer >= max_selltime)
             {
                 Debug.Log("bleh");
-                round.player_scores[GetComponent<Movement>().GetPlayerIndex()] += RemoveTop().point_value;
+                round.player_scores[p_index] += RemoveTop().point_value;
 
                 selltimer = 0;
             }
