@@ -23,6 +23,5 @@ public class StoreItem
                 image = Resources.Load<Sprite>("temp_image_3");
                 break;
         }
-        Debug.Log(image.ToString());
     }
 }

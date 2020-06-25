@@ -7,12 +7,6 @@ public class Movement : MonoBehaviour
 {
     public int items = 0;
 
-
-
-
-    [SerializeField]
-    private int playerindex = 0;
-
     public Vector2 inputVector;
     public float grab = 0;
 
@@ -30,11 +24,6 @@ public class Movement : MonoBehaviour
     float speed;
     float turnSpeed;
     float velocity;
-
-    public int GetPlayerIndex()
-    {
-        return playerindex;
-    }
 
     private void FixedUpdate()
     {

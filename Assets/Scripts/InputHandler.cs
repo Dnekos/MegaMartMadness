@@ -7,11 +7,13 @@ using UnityEngine.InputSystem;
 
 public class InputHandler : MonoBehaviour
 {
+
+    public PlayerConfiguration playerConfig;
+    private PlayerControl controls;
+
     //for communicating to player
     private Movement mover;
     private ItemManager inventory;
-    private Transform player;
-    private PlayerInput input;
     private RoundManager game;
 
     //camera stuff
@@ -25,36 +27,58 @@ public class InputHandler : MonoBehaviour
     // Start is called before the first frame update
     private void Awake()
     {
-        input = GetComponent<PlayerInput>();
-        var index = input.playerIndex;
-        var movers = FindObjectsOfType<Movement>();
-        mover = movers.FirstOrDefault(m => m.GetPlayerIndex() == index);
-        inventory = mover.GetComponent<ItemManager>();
-        player = mover.transform;
+        mover = GetComponent<Movement>();
+        inventory = GetComponent<ItemManager>();
+
+        controls = new PlayerControl();
 
         //round manager to know current gamestate
         game = FindObjectOfType<RoundManager>();
     }
 
+
+    public void InitializePlayer(PlayerConfiguration pc)
+    {
+        Debug.Log("initialized player " + pc.playerIndex);
+        playerConfig = pc;
+        playerConfig.theInput.SwitchCurrentActionMap("Gameplay");
+        playerConfig.theInput.onActionTriggered += DoAction;
+
+        GetComponent<ItemManager>().p_index = playerConfig.playerIndex;
+    }
+
+    private void DoAction(CallbackContext obj)
+    {
+        Debug.Log(obj.action.name);
+        if (obj.action.name == controls.Gameplay.Move.name)
+            OnMove(obj);
+        else if (obj.action.name == controls.Gameplay.Camera.name)
+            OnCamMove(obj);
+        else if (obj.action.name == controls.Gameplay.Sell.name)
+            OnSell(obj);
+        else if (obj.action.name == controls.Gameplay.Grab.name)
+            OnGrab(obj);
+        else if (obj.action.name == controls.Gameplay.Drop.name)
+            OnDrop(obj);
+        else if (obj.action.name == controls.Gameplay.UsePowerUp.name)
+            OnUsePowerup(obj);
+    }
+
     // Update is called once per frame
     private void Update()
     {
-        transform.position = player.position;
-        //cam.localPosition = new Vector3(cam_position.x * camera_dist, cam_position.y * camera_dist, -10);
+        cam.rotation = Quaternion.Euler(0, 0, 0);
     }
 
-    public void onCamMove(CallbackContext context)
+    public void OnCamMove(CallbackContext context)
     {
         cam.localPosition = new Vector3(context.ReadValue<Vector2>().x * camera_dist, context.ReadValue<Vector2>().y * camera_dist, -10);
-        //cam_position = context.ReadValue<Vector2>();
     }
 
     public void OnMove(CallbackContext context)
     {
         if (mover != null && game.gameState != "Round_End")
-        {
             mover.inputVector = context.ReadValue<Vector2>();
-        }
     }
 
     public void OnGrab(CallbackContext context)
@@ -67,25 +91,21 @@ public class InputHandler : MonoBehaviour
     {
         if (mover != null && game.gameState != "Round_End")
         {
-            Debug.Log("pee haha");
-
             if (context.ReadValue<float>() == 1 && inventory.atRegister)
                 inventory.selling = true;
             else
-            {
                 inventory.selling = false;
-            }
         }
     }
 
     public void OnDrop(CallbackContext context)
     {
         if (mover != null && game.gameState != "Round_End")
-        {
             if (context.ReadValue<float>() == 1 && !inventory.atRegister)
-            {
                 inventory.DropItem();
-            }
-        }
+    }
+    public void OnUsePowerup(CallbackContext context)
+    {
+
     }
 }

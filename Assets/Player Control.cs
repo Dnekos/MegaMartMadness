@@ -32,7 +32,7 @@ public class @PlayerControl : IInputActionCollection, IDisposable
                     ""id"": ""c595b05b-7f0c-4a27-b018-a6b7b65c19e1"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """"
+                    ""interactions"": ""Press""
                 },
                 {
                     ""name"": ""Drop"",
@@ -64,7 +64,7 @@ public class @PlayerControl : IInputActionCollection, IDisposable
                     ""id"": ""9e2188a3-9e7e-4a4a-9272-d3a9e25dc6dd"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": ""Hold""
+                    ""interactions"": ""Press""
                 }
             ],
             ""bindings"": [
