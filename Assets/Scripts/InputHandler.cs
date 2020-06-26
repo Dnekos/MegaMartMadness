@@ -72,7 +72,16 @@ public class InputHandler : MonoBehaviour
 
     public void OnCamMove(CallbackContext context)
     {
-        cam.localPosition = new Vector3(context.ReadValue<Vector2>().x * camera_dist, context.ReadValue<Vector2>().y * camera_dist, -10);
+         if (context.control.name == "position") //normalize vector if mouse
+         {
+            float camh = Screen.height / 2;
+            float camw = Screen.width / 2;
+            float camx = Mathf.Clamp((context.ReadValue<Vector2>().x - camw) / camw,-1,1);
+            float camy = Mathf.Clamp((context.ReadValue<Vector2>().y - camh) / camh , -1, 1);
+            cam.localPosition = new Vector3(camx * camera_dist, camy * camera_dist, -10);
+        }
+        else //for joysticks and such
+            cam.localPosition = new Vector3(context.ReadValue<Vector2>().x * camera_dist, context.ReadValue<Vector2>().y * camera_dist, -10);
     }
 
     public void OnMove(CallbackContext context)
@@ -83,6 +92,7 @@ public class InputHandler : MonoBehaviour
 
     public void OnGrab(CallbackContext context)
     {
+        Debug.Log("grab context = " + context.ReadValue<float>());
         if (mover != null && game.gameState != "Round_End")
             mover.grab = context.ReadValue<float>();
     }

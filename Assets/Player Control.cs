@@ -28,17 +28,17 @@ public class @PlayerControl : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": ""Grab"",
-                    ""type"": ""Button"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""c595b05b-7f0c-4a27-b018-a6b7b65c19e1"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": ""Press""
+                    ""interactions"": """"
                 },
                 {
                     ""name"": ""Drop"",
-                    ""type"": ""Button"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""c5c9dd2e-aa11-4072-89b5-d40eef563175"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
                 },
@@ -60,11 +60,11 @@ public class @PlayerControl : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": ""UsePowerUp"",
-                    ""type"": ""Button"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""9e2188a3-9e7e-4a4a-9272-d3a9e25dc6dd"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": ""Press""
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -214,7 +214,7 @@ public class @PlayerControl : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""823c2f01-7997-4205-b3c3-a64019109b4d"",
-                    ""path"": ""<Mouse>/radius"",
+                    ""path"": ""<Mouse>/position"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardAndMouse"",
