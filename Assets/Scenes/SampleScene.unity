@@ -558,7 +558,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 251686af227366f478c66b7e447a9b6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameState: 
+  gameState: 0
   roundTime: 180
 --- !u!114 &1071155284
 MonoBehaviour:

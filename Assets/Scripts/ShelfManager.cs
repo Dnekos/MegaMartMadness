@@ -18,12 +18,12 @@ public class ShelfManager : MonoBehaviour
 
     private void Start()
     {
-        
-        if (item_index != 0)
+        Debug.Log(item_index);
+        if (item_index != 0)//if stocked, show that
         {
             stocked_item = new StoreItem(item_index);
             filled = true;
-            if (filledimage == null)
+            if (filledimage == null) //if gameobject is FloorItem, set image to item's sprite
             {
                 filledimage = stocked_item.image;
             }
@@ -35,8 +35,8 @@ public class ShelfManager : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        Movement player = collision.GetComponent<Movement>();
-        if (collision.tag == "Player" && filled  && player.grab == 1)
+        Movement player = collision.GetComponent<Movement>();//grab Movement data from collision
+        if (collision.tag == "Player" && filled && player.grab == 1) //if collision is with a player & grab is held down
         {
             if (collision.GetComponent<ItemManager>().AddItem(stocked_item))
             {
@@ -44,12 +44,11 @@ public class ShelfManager : MonoBehaviour
                 player.items++;
                 Debug.Log("grabbed");
 
-                //
+                //if the ShelfManager is attached to a floor item, delete it
                 if (emptyimage == null)
                     Destroy(gameObject);
-                else
+                else //else, show the empty sprite
                     gameObject.GetComponent<SpriteRenderer>().sprite = emptyimage;
-
             }
         }
     }

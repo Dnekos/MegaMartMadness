@@ -36,6 +36,10 @@ public class TimerBehavior : MonoBehaviour
         timerIsRunning = true;
     }
 
+    /// <summary>
+    /// formats and displays time into minute:second format
+    /// </summary>
+    /// <param name="timeToDisplay">number in seconds to be formatted</param>
     void DisplayTime(float timeToDisplay)
     {
         float minutes = Mathf.FloorToInt(timeToDisplay / 60);

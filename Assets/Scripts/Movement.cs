@@ -3,6 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+public enum StatusConditions
+{
+    Slow,
+    Conveyor,
+    Stunned,
+
+}
+
+
 public class Movement : MonoBehaviour
 {
     public int items = 0;
@@ -27,12 +36,14 @@ public class Movement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        //gices 
         speed += inputVector.y * (acceleration * Time.deltaTime);
 
         if (Mathf.Abs(speed) > maxSpeed)
             speed = maxSpeed;
         transform.Translate(Vector2.up * speed, Space.Self);
 
+        //gives it the drag
         speed = speed * moveDrag;
         if (Mathf.Abs(speed) <= minSpeed && inputVector.y == 0)
             speed = 0;

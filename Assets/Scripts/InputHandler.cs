@@ -24,7 +24,7 @@ public class InputHandler : MonoBehaviour
     Vector2 cam_position;
 
 
-    // Start is called before the first frame update
+    // gathers components needed for the On__ functions
     private void Awake()
     {
         mover = GetComponent<Movement>();
@@ -36,7 +36,10 @@ public class InputHandler : MonoBehaviour
         game = FindObjectOfType<RoundManager>();
     }
 
-
+    /// <summary>
+    /// creates configuration and links it with DoAction()
+    /// </summary>
+    /// <param name="pc">configuration from PlayerSelect scene</param>
     public void InitializePlayer(PlayerConfiguration pc)
     {
         Debug.Log("initialized player " + pc.playerIndex);
@@ -47,15 +50,18 @@ public class InputHandler : MonoBehaviour
         GetComponent<ItemManager>().p_index = playerConfig.playerIndex;
     }
 
+    /// <summary>
+    /// calls each of the On__ functions based on the context of the button
+    /// </summary>
+    /// <param name="obj"></param>
     private void DoAction(CallbackContext obj)
     {
-        Debug.Log(obj.action.name);
         if (obj.action.name == controls.Gameplay.Move.name)
             OnMove(obj);
         else if (obj.action.name == controls.Gameplay.Camera.name)
             OnCamMove(obj);
         else if (obj.action.name == controls.Gameplay.Sell.name)
-            OnSell(obj);
+            OnBuy(obj);
         else if (obj.action.name == controls.Gameplay.Grab.name)
             OnGrab(obj);
         else if (obj.action.name == controls.Gameplay.Drop.name)
@@ -67,50 +73,73 @@ public class InputHandler : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        cam.rotation = Quaternion.Euler(0, 0, 0);
+        cam.rotation = Quaternion.Euler(0, 0, 0);//locks camera rotation as it is a child of the player
     }
 
+    /// <summary>
+    /// handles pressing any of the 'cam' buttons/joystick
+    /// </summary>
+    /// <param name="context"></param>
     public void OnCamMove(CallbackContext context)
     {
-         if (context.control.name == "position") //normalize vector if mouse
-         {
-            float camh = Screen.height / 2;
-            float camw = Screen.width / 2;
-            float camx = Mathf.Clamp((context.ReadValue<Vector2>().x - camw) / camw,-1,1);
-            float camy = Mathf.Clamp((context.ReadValue<Vector2>().y - camh) / camh , -1, 1);
-            cam.localPosition = new Vector3(camx * camera_dist, camy * camera_dist, -10);
+        if (game.gameState == GameStates.RoundPlay)
+        {
+            if (context.control.name == "position") //normalize vector if mouse
+            {
+                float camh = Screen.height / 2;
+                float camw = Screen.width / 2;
+                float camx = Mathf.Clamp((context.ReadValue<Vector2>().x - camw) / camw, -1, 1);
+                float camy = Mathf.Clamp((context.ReadValue<Vector2>().y - camh) / camh, -1, 1);
+                cam.localPosition = new Vector3(camx * camera_dist, camy * camera_dist, -10);
+            }
+            else //for joysticks and such
+                cam.localPosition = new Vector3(context.ReadValue<Vector2>().x * camera_dist, context.ReadValue<Vector2>().y * camera_dist, -10);
         }
-        else //for joysticks and such
-            cam.localPosition = new Vector3(context.ReadValue<Vector2>().x * camera_dist, context.ReadValue<Vector2>().y * camera_dist, -10);
     }
 
+    /// <summary>
+    /// handles pressing any of the 'move' buttons/joystick
+    /// </summary>
+    /// <param name="context"></param>
     public void OnMove(CallbackContext context)
     {
-        if (mover != null && game.gameState != "Round_End")
+        if (mover != null && game.gameState == GameStates.RoundPlay)
             mover.inputVector = context.ReadValue<Vector2>();
     }
 
+    /// <summary>
+    /// handles pressing the 'grab' button
+    /// </summary>
+    /// <param name="context"></param>
     public void OnGrab(CallbackContext context)
     {
-        Debug.Log("grab context = " + context.ReadValue<float>());
-        if (mover != null && game.gameState != "Round_End")
+       // Debug.Log("grab context = " + context.ReadValue<float>());
+        if (mover != null && game.gameState == GameStates.RoundPlay)
             mover.grab = context.ReadValue<float>();
     }
 
-    public void OnSell(CallbackContext context)
+    /// <summary>
+    /// handles holding the 'buy' button
+    /// </summary>
+    /// <param name="context"></param>
+    public void OnBuy(CallbackContext context)
     {
-        if (mover != null && game.gameState != "Round_End")
+        if (mover != null && game.gameState == GameStates.RoundPlay)
         {
             if (context.ReadValue<float>() == 1 && inventory.atRegister)
-                inventory.selling = true;
+                inventory.buying = true;
             else
-                inventory.selling = false;
+                inventory.buying = false;
         }
     }
 
+    /// <summary>
+    /// handles pressing the 'drop' button
+    /// </summary>
+    /// <param name="context"></param>
     public void OnDrop(CallbackContext context)
     {
-        if (mover != null && game.gameState != "Round_End")
+        if (mover != null && game.gameState == GameStates.RoundPlay)
             if (context.ReadValue<float>() == 1 && !inventory.atRegister)
                 inventory.DropItem();
     }

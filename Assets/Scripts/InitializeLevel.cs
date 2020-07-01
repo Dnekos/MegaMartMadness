@@ -11,7 +11,9 @@ public class InitializeLevel : MonoBehaviour
 
 
 
-    // Start is called before the first frame update
+    /// <summary>
+    /// spawns in the player objects and starts the process of initializing them
+    /// </summary>
     void Start()
     {
         var PlayerConfigs = PlayerConfigManager.Instance.GetPlayerConfigs().ToArray();
