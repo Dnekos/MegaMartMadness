@@ -94,8 +94,8 @@ MonoBehaviour:
   droppeditem: {fileID: 7023457457445409154, guid: 917304bc1ade6a54e9f2aa07de48e1aa,
     type: 3}
   atRegister: 0
-  selling: 0
-  max_selltime: 0.4
+  buying: 0
+  max_buytime: 0.4
   healthbar: {fileID: 5075547959104183880}
   p_index: 0
 --- !u!50 &8295141143851229149

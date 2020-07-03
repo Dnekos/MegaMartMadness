@@ -9,7 +9,7 @@ public class ItemDispenser : MonoBehaviour
     StoreItem stocked_item;
 
     [SerializeField]
-    bool filled = false;
+    public bool filled = false;
 
     [SerializeField]
     Sprite filledimage;
@@ -18,7 +18,6 @@ public class ItemDispenser : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log(item_index);
         if (item_index != 0)//if stocked, show that
         {
             stocked_item = new StoreItem(item_index);
@@ -63,6 +62,7 @@ public class ItemDispenser : MonoBehaviour
     /// <param name="newIndex"></param>
     public void FillShelf(int newIndex)
     {
+        Debug.Log("shelf filled: " + newIndex);
         item_index = newIndex;
         stocked_item = new StoreItem(item_index);
         filled = true;

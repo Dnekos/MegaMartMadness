@@ -41,6 +41,8 @@ public class RoundManager : MonoBehaviour
         timeToStock -= Time.deltaTime;
         if (timeToStock <= 0)
         {
+            Debug.Log("stocking now");
+
             timeToStock = maxTTS;
             for (int i = 0; i < shelves.Length; i++)
                 shelves[i].StockShelves(1);

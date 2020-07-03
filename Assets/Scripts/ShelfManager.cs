@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Data;
+using System.Linq;
 using Mono.Data.Sqlite;
 
 public enum ShelveType//for item spawning
@@ -9,7 +10,7 @@ public enum ShelveType//for item spawning
     Common,
     Uncommon,
     Rare,
-    Power_Ups
+    Power_Up
 }
 
 /// <summary>
@@ -40,11 +41,17 @@ public class ShelfManager : MonoBehaviour
 
         for (int i = 0; i < shelves_tbs; i++)//once for each shelf to be stocked
         {
+            Debug.Log("shelf stocked");
+
+            //safeguard to stop stocking if all shelves in group are filled, else the do-while gets caught infinitely
+            if (shelves.Any(s => !s.filled))
+                break;
+
             //this bit sets the index to a shelf that hasnt been stocked this wave
             int shelf_index = 0;
             do
                 shelf_index = Random.Range(0, shelves.Length);
-            while (shelves[shelf_index].item_index != 0);
+            while (shelves[shelf_index].item_index != 0 && !shelves[shelf_index].filled);
 
 
             //this whole thing calls the .db file to get the item index. look to StoreItem for an explanation
@@ -53,12 +60,15 @@ public class ShelfManager : MonoBehaviour
             dbcon.Open();
             IDbCommand cmnd_read = dbcon.CreateCommand();
             IDataReader reader;
-            cmnd_read.CommandText = "SELECT * FROM ItemDrops WHERE Catagory = '" +catagory+ "' AND Rarity >= "+Random.Range(0f,1f);
+            cmnd_read.CommandText = "SELECT * FROM ItemDrops WHERE Catagory = '" +catagory+ "' AND Rarity >= 0";//gets only first one
+            Debug.Log("SELECT * FROM ItemDrops WHERE Catagory = " + catagory + " AND Rarity >= 0");
+            //cmnd_read.CommandText = "SELECT * FROM ItemDrops WHERE Catagory = '" +catagory+ "' AND Rarity >= "+Random.Range(0f,1f);
             reader = cmnd_read.ExecuteReader();
 
             while (reader.Read())
             {
                 shelves[shelf_index].FillShelf(int.Parse(reader[0].ToString()));
+                break;
             }
             dbcon.Close();
         }
