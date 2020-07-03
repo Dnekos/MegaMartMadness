@@ -109,7 +109,7 @@ public class ItemManager : MonoBehaviour
         if (items.Count > 0)
         {
             int item = RemoveTop().index;
-            droppeditem.GetComponent<ShelfManager>().item_index = item;
+            droppeditem.GetComponent<ItemDispenser>().item_index = item;
             Instantiate(droppeditem, transform.position, transform.rotation);
         }
 

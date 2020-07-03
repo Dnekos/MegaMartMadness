@@ -15,12 +15,13 @@ public class PlayerConfigManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance != null)
+        if (Instance != null)//error checking
         {
             Debug.Log("trying to make new instances");
         }
         else
         {
+            //this allows future scenes to utilize the controllers that are already in 
             Instance = this;
             DontDestroyOnLoad(Instance);
             playerConfigs = new List<PlayerConfiguration>();
