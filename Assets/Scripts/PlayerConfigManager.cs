@@ -38,7 +38,7 @@ public class PlayerConfigManager : MonoBehaviour
         playerConfigs[index].isReady = true;
         if(playerConfigs.All(p => p.isReady == true))
         {
-            SceneManager.LoadScene("SampleScene");
+            SceneManager.LoadScene("StageOne");
         }
     }
     public void HandlePlayerJoin(PlayerInput pi)
