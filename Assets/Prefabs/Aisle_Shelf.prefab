@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 2999183093532007099}
   - component: {fileID: 2999183093532007047}
   - component: {fileID: 2999183093532007046}
-  - component: {fileID: 6874970007748752444}
   - component: {fileID: 9021968973999505418}
   m_Layer: 0
   m_Name: Aisle_Shelf
@@ -124,8 +123,8 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.5, y: 0}
+  m_UsedByComposite: 1
+  m_Offset: {x: 1.6, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -136,7 +135,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 3, y: 3}
+  m_Size: {x: 1.2, y: 3}
   m_EdgeRadius: 0
 --- !u!114 &2999183093532007046
 MonoBehaviour:
@@ -154,20 +153,6 @@ MonoBehaviour:
   filled: 0
   filledimage: {fileID: 21300000, guid: 4198d91add8417d4fa7cf17f46a5f953, type: 3}
   emptyimage: {fileID: 21300000, guid: d1a97050c23ec5041903f3cc1134f358, type: 3}
---- !u!114 &6874970007748752444
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2999183093532007098}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18fb53f349dd00c4da2ecd6c18037210, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  titleText: {fileID: 0}
-  readyButton: {fileID: 0}
 --- !u!114 &9021968973999505418
 MonoBehaviour:
   m_ObjectHideFlags: 0

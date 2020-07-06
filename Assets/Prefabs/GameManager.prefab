@@ -185,8 +185,8 @@ MonoBehaviour:
   spawnPoints:
   - {fileID: 6452649204242007034}
   - {fileID: 6452649202823825285}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 6668666354720770883}
+  - {fileID: 4776437122940713560}
   playerPrefab: {fileID: 1094511314721450476, guid: 449419030ebf4fa42b989533d92d038a,
     type: 3}
 --- !u!1 &6452649204242007033
