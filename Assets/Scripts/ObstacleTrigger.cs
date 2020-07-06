@@ -48,6 +48,9 @@ public class ObstacleTrigger : MonoBehaviour
                 case StatusConditions.Slippery:
                     mover.temp_drag /= ObstacleModifier;
                     break;
+                case StatusConditions.Conveyor:
+                  //  collision.attachedRigidbody.AddForce(transform.up * ObstacleModifier*2);
+                    break;
             }
         }
     }
