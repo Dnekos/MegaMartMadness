@@ -22,6 +22,8 @@ public class InputHandler : MonoBehaviour
     [SerializeField]
     float camera_dist;
     Vector2 cam_position;
+    [SerializeField]
+    Transform camholder;
 
 
     // gathers components needed for the On__ functions
@@ -73,7 +75,8 @@ public class InputHandler : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        cam.rotation = Quaternion.Euler(0, 0, 0);//locks camera rotation as it is a child of the player
+        //cam.rotation = Quaternion.Euler(0, 0, 0);//locks camera rotation as it is a child of the player
+        camholder.rotation = Quaternion.Euler(0, 0, 0);
     }
 
     /// <summary>

@@ -16,9 +16,7 @@ public class PlayerConfigManager : MonoBehaviour
     private void Awake()
     {
         if (Instance != null)//error checking
-        {
             Debug.Log("trying to make new instances");
-        }
         else
         {
             //this allows future scenes to utilize the controllers that are already in 
@@ -37,9 +35,7 @@ public class PlayerConfigManager : MonoBehaviour
     {
         playerConfigs[index].isReady = true;
         if(playerConfigs.All(p => p.isReady == true))
-        {
             SceneManager.LoadScene("StageOne");
-        }
     }
     public void HandlePlayerJoin(PlayerInput pi)
     {
@@ -62,5 +58,4 @@ public class PlayerConfiguration
     public PlayerInput theInput { get; set; }
     public int playerIndex { get; set; }
     public bool isReady { get; set; }
-    
 }
