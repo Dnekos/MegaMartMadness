@@ -1,12 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
+public enum Power_Ups
+{
+    Grabber,
+    Scanner,
+    Boost,
+    Shield
+}
 
 public class ItemManager : MonoBehaviour
 {
-    [SerializeField]
+    [HideInInspector]
     public List<StoreItem> items = new List<StoreItem>();
-
     [SerializeField]
     int maxItems = 3;
 
@@ -22,7 +30,9 @@ public class ItemManager : MonoBehaviour
     GameObject droppeditem;
 
     //register stuff
+    [HideInInspector]
     public bool atRegister;
+    [HideInInspector]
     public bool buying;
     float buytimer = 0;
     [SerializeField]
@@ -30,8 +40,12 @@ public class ItemManager : MonoBehaviour
     [SerializeField]
     Transform healthbar;
 
+    //round/scoring stuff
     RoundManager round;
     public int p_index;
+
+    [SerializeField]
+    Image PUIcon;
 
     private void Start()
     {
@@ -77,7 +91,11 @@ public class ItemManager : MonoBehaviour
     /// <returns></returns>
     public bool AddItem(StoreItem item)
     {
-        if (items.Count < maxItems)//checks to see if cart is full
+        if (item.group == "Power_Up")
+        {
+
+        }
+        else if (items.Count < maxItems)//checks to see if cart is full
         {
             items.Add(item);
             Debug.Log("item count: "+items.Count);

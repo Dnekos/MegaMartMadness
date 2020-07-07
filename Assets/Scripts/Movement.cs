@@ -14,11 +14,11 @@ public enum StatusConditions
 
 public class Movement : MonoBehaviour
 {
-    public int items = 0;
-
     public Vector2 inputVector;
+    [HideInInspector]
     public float grab = 0;
 
+    //adjustables
     [SerializeField]
     float Drag;
     [SerializeField]

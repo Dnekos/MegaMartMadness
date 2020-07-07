@@ -44,7 +44,6 @@ public class ItemDispenser : MonoBehaviour
             if (collision.GetComponent<ItemManager>().AddItem(stocked_item))
             {
                 filled = false;
-                player.items++;
                 Debug.Log("grabbed");
 
                 //if the ShelfManager is attached to a floor item, delete it

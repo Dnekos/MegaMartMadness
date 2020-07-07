@@ -21,6 +21,17 @@ public class InitializeLevel : MonoBehaviour
         {
             var player = Instantiate(playerPrefab, spawnPoints[i].position, spawnPoints[i].rotation, gameObject.transform);
             player.GetComponent<InputHandler>().InitializePlayer(PlayerConfigs[i]);
+            if (PlayerConfigs.Length > 2)
+            {
+                if (i < 3)
+                    player.GetComponentInChildren<Camera>().rect = new Rect((i % 2) * 0.5f, 0.5f, 0.5f, 0.5f);
+                else
+                    player.GetComponentInChildren<Camera>().rect = new Rect((i % 2) * 0.5f, 0, 0.5f, 1);
+            }
+            else if (PlayerConfigs.Length == 2)
+            {
+                player.GetComponentInChildren<Camera>().rect = new Rect((i % 2) * .5f, 0, 0.5f, 1);
+            }
         }
     }
 }
