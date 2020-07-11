@@ -80,7 +80,7 @@ MonoBehaviour:
   temp_drag: 1
   temp_speed: 1
   temp_translate: {x: 0, y: 0}
-  reverse_allowance: 40
+  reverse_allowance: 25
 --- !u!114 &473960221506447026
 MonoBehaviour:
   m_ObjectHideFlags: 0

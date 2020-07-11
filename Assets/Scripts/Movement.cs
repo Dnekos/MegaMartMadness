@@ -93,8 +93,9 @@ public class Movement : MonoBehaviour
             Vector2.ClampMagnitude(newspeed, maxSpeed);
 
             target_degree = (Mathf.Atan2(-newspeed.x, newspeed.y) * Mathf.Rad2Deg + 360) % 360;
-            bool fob = !(Mathf.DeltaAngle(transform.eulerAngles.z + 180,target_degree) < Mathf.Abs(reverse_allowance));
-            
+            bool fob = !(Mathf.DeltaAngle(transform.eulerAngles.z, target_degree) > 180-reverse_allowance);
+            Debug.Log(Mathf.DeltaAngle(transform.eulerAngles.z + 180, target_degree));
+            Debug.Log(fob);
             if (fob)
                 transform.Translate(Vector2.up * newspeed.magnitude, Space.Self);
             else
