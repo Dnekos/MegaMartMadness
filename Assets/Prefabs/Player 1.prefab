@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8892949293569957602}
   - component: {fileID: 1767010929737408896}
   m_Layer: 0
-  m_Name: Player
+  m_Name: Player 1
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -69,17 +69,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4acdffb369865344ea58712e14c1f0ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TankControls: 1
+  TankControls: 0
   inputVector: {x: 0, y: 0}
   grab: 0
   Drag: 0.95
   acceleration: 0.6
   maxSpeed: 10
   minSpeed: 0.02
-  turnAcceleration: 10
+  turnAcceleration: 0.09
   temp_drag: 1
   temp_speed: 1
   temp_translate: {x: 0, y: 0}
+  reverse_allowance: 40
 --- !u!114 &473960221506447026
 MonoBehaviour:
   m_ObjectHideFlags: 0
