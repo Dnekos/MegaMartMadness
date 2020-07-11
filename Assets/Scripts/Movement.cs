@@ -16,6 +16,8 @@ public class Movement : MonoBehaviour
 {
     [SerializeField]
     bool TankControls;
+    [SerializeField]
+    bool ReverseControls;
 
     [HideInInspector]
     public Vector2 inputVector;
@@ -51,6 +53,7 @@ public class Movement : MonoBehaviour
     float target_degree;
     [SerializeField]
     int reverse_allowance = 25;
+    public float reverse;
 
     private void Start()
     {
@@ -85,7 +88,7 @@ public class Movement : MonoBehaviour
             if (Mathf.Abs(speed) <= minSpeed && inputVector.y == 0)
                 speed = 0;
         }
-        else
+        else if (!ReverseControls)
         {
             //gives the speed 
             newspeed += inputVector * (acceleration * Time.deltaTime) * temp_speed;
@@ -93,7 +96,8 @@ public class Movement : MonoBehaviour
             Vector2.ClampMagnitude(newspeed, maxSpeed);
 
             target_degree = (Mathf.Atan2(-newspeed.x, newspeed.y) * Mathf.Rad2Deg + 360) % 360;
-            bool fob = !(Mathf.DeltaAngle(transform.eulerAngles.z, target_degree) > 180-reverse_allowance);
+            //if (currkey)
+             bool fob = !(Mathf.DeltaAngle(transform.eulerAngles.z, target_degree) > 180-reverse_allowance);
             Debug.Log(Mathf.DeltaAngle(transform.eulerAngles.z + 180, target_degree));
             Debug.Log(fob);
             if (fob)
@@ -108,14 +112,49 @@ public class Movement : MonoBehaviour
                 speed = 0;
 
             float angle;
+            newturnspeed += inputVector.magnitude * turnAcceleration * Time.deltaTime * temp_speed;
+
             if (fob)
             {
-                newturnspeed += inputVector.magnitude * turnAcceleration * Time.deltaTime * temp_speed;
                 angle = Mathf.LerpAngle(transform.eulerAngles.z, target_degree, newturnspeed);
             }
             else
                 angle = Mathf.LerpAngle(transform.eulerAngles.z, target_degree + 180, newturnspeed);
             transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+            newturnspeed *= Drag * temp_drag;
+        }
+        else
+        {
+            //gives the speed 
+            newspeed += inputVector * (acceleration * Time.deltaTime) * temp_speed;
+
+            Vector2.ClampMagnitude(newspeed, maxSpeed);
+
+            target_degree = (Mathf.Atan2(-newspeed.x, newspeed.y) * Mathf.Rad2Deg + 360) % 360;
+            Debug.Log(Mathf.DeltaAngle(transform.eulerAngles.z + 180, target_degree));
+
+
+            if (reverse == 0)
+                transform.Translate(Vector2.up * newspeed.magnitude, Space.Self);
+            else
+                transform.Translate(Vector2.down * newspeed.magnitude, Space.Self);
+
+
+            //gives it the drag
+            newspeed = newspeed * Drag * temp_drag;
+
+            if (Mathf.Abs(speed) <= minSpeed && inputVector.y == 0)
+                speed = 0;
+
+            float angle;
+            newturnspeed += inputVector.magnitude * turnAcceleration * Time.deltaTime * temp_speed;
+
+           // if (reverse == 0)
+                angle = Mathf.LerpAngle(transform.eulerAngles.z, target_degree, newturnspeed);
+           // else
+           //     angle = Mathf.LerpAngle(transform.eulerAngles.z, target_degree + 180, newturnspeed);
+            if (inputVector != Vector2.zero)
+                transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
             newturnspeed *= Drag * temp_drag;
         }
     }

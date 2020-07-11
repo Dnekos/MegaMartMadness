@@ -65,6 +65,14 @@ public class @PlayerControl : IInputActionCollection, IDisposable
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Reverse"",
+                    ""type"": ""Button"",
+                    ""id"": ""fd8f7bac-ac3e-4a0c-93bf-1d2eb7c6b5aa"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -133,6 +141,17 @@ public class @PlayerControl : IInputActionCollection, IDisposable
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""407a2dd2-8649-4aa1-869a-f88252781cba"",
+                    ""path"": ""<Gamepad>/dpad"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
@@ -285,6 +304,17 @@ public class @PlayerControl : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""KeyboardAndMouse"",
                     ""action"": ""UsePowerUp"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1382ec21-d7c2-4231-84bd-0818e17329da"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Reverse"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -441,6 +471,7 @@ public class @PlayerControl : IInputActionCollection, IDisposable
         m_Gameplay_Camera = m_Gameplay.FindAction("Camera", throwIfNotFound: true);
         m_Gameplay_Sell = m_Gameplay.FindAction("Sell", throwIfNotFound: true);
         m_Gameplay_UsePowerUp = m_Gameplay.FindAction("UsePowerUp", throwIfNotFound: true);
+        m_Gameplay_Reverse = m_Gameplay.FindAction("Reverse", throwIfNotFound: true);
         // Menus
         m_Menus = asset.FindActionMap("Menus", throwIfNotFound: true);
         m_Menus_Move1 = m_Menus.FindAction("Move1", throwIfNotFound: true);
@@ -500,6 +531,7 @@ public class @PlayerControl : IInputActionCollection, IDisposable
     private readonly InputAction m_Gameplay_Camera;
     private readonly InputAction m_Gameplay_Sell;
     private readonly InputAction m_Gameplay_UsePowerUp;
+    private readonly InputAction m_Gameplay_Reverse;
     public struct GameplayActions
     {
         private @PlayerControl m_Wrapper;
@@ -510,6 +542,7 @@ public class @PlayerControl : IInputActionCollection, IDisposable
         public InputAction @Camera => m_Wrapper.m_Gameplay_Camera;
         public InputAction @Sell => m_Wrapper.m_Gameplay_Sell;
         public InputAction @UsePowerUp => m_Wrapper.m_Gameplay_UsePowerUp;
+        public InputAction @Reverse => m_Wrapper.m_Gameplay_Reverse;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -537,6 +570,9 @@ public class @PlayerControl : IInputActionCollection, IDisposable
                 @UsePowerUp.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnUsePowerUp;
                 @UsePowerUp.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnUsePowerUp;
                 @UsePowerUp.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnUsePowerUp;
+                @Reverse.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnReverse;
+                @Reverse.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnReverse;
+                @Reverse.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnReverse;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -559,6 +595,9 @@ public class @PlayerControl : IInputActionCollection, IDisposable
                 @UsePowerUp.started += instance.OnUsePowerUp;
                 @UsePowerUp.performed += instance.OnUsePowerUp;
                 @UsePowerUp.canceled += instance.OnUsePowerUp;
+                @Reverse.started += instance.OnReverse;
+                @Reverse.performed += instance.OnReverse;
+                @Reverse.canceled += instance.OnReverse;
             }
         }
     }
@@ -630,6 +669,7 @@ public class @PlayerControl : IInputActionCollection, IDisposable
         void OnCamera(InputAction.CallbackContext context);
         void OnSell(InputAction.CallbackContext context);
         void OnUsePowerUp(InputAction.CallbackContext context);
+        void OnReverse(InputAction.CallbackContext context);
     }
     public interface IMenusActions
     {

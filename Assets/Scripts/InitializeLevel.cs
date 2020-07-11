@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class InitializeLevel : MonoBehaviour
 {
@@ -16,7 +17,15 @@ public class InitializeLevel : MonoBehaviour
     /// </summary>
     void Start()
     {
-        var PlayerConfigs = PlayerConfigManager.Instance.GetPlayerConfigs().ToArray();
+        PlayerConfiguration[] PlayerConfigs = { };
+        try
+        {
+             PlayerConfigs = PlayerConfigManager.Instance.GetPlayerConfigs().ToArray();
+        }
+        catch
+        {
+            SceneManager.LoadScene("PlayerSelect");
+        }
         for (int i = 0; i < PlayerConfigs.Length;i++)
         {
             var player = Instantiate(playerPrefab, spawnPoints[i].position, spawnPoints[i].rotation, gameObject.transform);

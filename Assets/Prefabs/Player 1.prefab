@@ -70,17 +70,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TankControls: 0
+  ReverseControls: 1
   inputVector: {x: 0, y: 0}
   grab: 0
   Drag: 0.95
-  acceleration: 0.6
+  acceleration: 0.7
   maxSpeed: 10
   minSpeed: 0.02
-  turnAcceleration: 0.09
+  turnAcceleration: 0.4
   temp_drag: 1
   temp_speed: 1
   temp_translate: {x: 0, y: 0}
-  reverse_allowance: 25
+  reverse_allowance: 50
+  reverse: 0
 --- !u!114 &473960221506447026
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -959,7 +961,7 @@ Canvas:
   serializedVersion: 3
   m_RenderMode: 1
   m_Camera: {fileID: 2395711925958450386}
-  m_PlaneDistance: 100
+  m_PlaneDistance: 1
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0

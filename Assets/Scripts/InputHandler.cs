@@ -70,6 +70,9 @@ public class InputHandler : MonoBehaviour
             OnDrop(obj);
         else if (obj.action.name == controls.Gameplay.UsePowerUp.name)
             OnUsePowerup(obj);
+        else if (obj.action.name == controls.Gameplay.Reverse.name)
+            OnReverse(obj);
+
     }
 
     // Update is called once per frame
@@ -107,7 +110,9 @@ public class InputHandler : MonoBehaviour
     public void OnMove(CallbackContext context)
     {
         if (mover != null && game.gameState == GameStates.RoundPlay)
+        {
             mover.inputVector = context.ReadValue<Vector2>();
+        }
     }
 
     /// <summary>
@@ -149,5 +154,10 @@ public class InputHandler : MonoBehaviour
     public void OnUsePowerup(CallbackContext context)
     {
 
+    }
+    public void OnReverse(CallbackContext context)
+    {
+        if (mover != null && game.gameState == GameStates.RoundPlay)
+            mover.reverse = context.ReadValue<float>();
     }
 }
