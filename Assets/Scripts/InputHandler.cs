@@ -7,11 +7,13 @@ using UnityEngine.InputSystem;
 
 public class InputHandler : MonoBehaviour
 {
+
+    public PlayerConfiguration playerConfig;
+    private PlayerControl controls;
+
     //for communicating to player
     private Movement mover;
     private ItemManager inventory;
-    private Transform player;
-    private PlayerInput input;
     private RoundManager game;
 
     //camera stuff
@@ -20,72 +22,142 @@ public class InputHandler : MonoBehaviour
     [SerializeField]
     float camera_dist;
     Vector2 cam_position;
+    [SerializeField]
+    Transform camholder;
 
 
-    // Start is called before the first frame update
+    // gathers components needed for the On__ functions
     private void Awake()
     {
-        input = GetComponent<PlayerInput>();
-        var index = input.playerIndex;
-        var movers = FindObjectsOfType<Movement>();
-        mover = movers.FirstOrDefault(m => m.GetPlayerIndex() == index);
-        inventory = mover.GetComponent<ItemManager>();
-        player = mover.transform;
+        mover = GetComponent<Movement>();
+        inventory = GetComponent<ItemManager>();
+
+        controls = new PlayerControl();
 
         //round manager to know current gamestate
         game = FindObjectOfType<RoundManager>();
     }
 
+    /// <summary>
+    /// creates configuration and links it with DoAction()
+    /// </summary>
+    /// <param name="pc">configuration from PlayerSelect scene</param>
+    public void InitializePlayer(PlayerConfiguration pc)
+    {
+        Debug.Log("initialized player " + pc.playerIndex);
+        playerConfig = pc;
+        playerConfig.theInput.SwitchCurrentActionMap("Gameplay");
+        playerConfig.theInput.onActionTriggered += DoAction;
+
+        GetComponent<ItemManager>().p_index = playerConfig.playerIndex;
+    }
+
+    /// <summary>
+    /// calls each of the On__ functions based on the context of the button
+    /// </summary>
+    /// <param name="obj"></param>
+    private void DoAction(CallbackContext obj)
+    {
+        if (obj.action.name == controls.Gameplay.Move.name)
+            OnMove(obj);
+        else if (obj.action.name == controls.Gameplay.Camera.name)
+            OnCamMove(obj);
+        else if (obj.action.name == controls.Gameplay.Sell.name)
+            OnBuy(obj);
+        else if (obj.action.name == controls.Gameplay.Grab.name)
+            OnGrab(obj);
+        else if (obj.action.name == controls.Gameplay.Drop.name)
+            OnDrop(obj);
+        else if (obj.action.name == controls.Gameplay.UsePowerUp.name)
+            OnUsePowerup(obj);
+        else if (obj.action.name == controls.Gameplay.Reverse.name)
+            OnReverse(obj);
+
+    }
+
     // Update is called once per frame
     private void Update()
     {
-        transform.position = player.position;
-        //cam.localPosition = new Vector3(cam_position.x * camera_dist, cam_position.y * camera_dist, -10);
+        //cam.rotation = Quaternion.Euler(0, 0, 0);//locks camera rotation as it is a child of the player
+        camholder.rotation = Quaternion.Euler(0, 0, 0);
     }
 
-    public void onCamMove(CallbackContext context)
+    /// <summary>
+    /// handles pressing any of the 'cam' buttons/joystick
+    /// </summary>
+    /// <param name="context"></param>
+    public void OnCamMove(CallbackContext context)
     {
-        cam.localPosition = new Vector3(context.ReadValue<Vector2>().x * camera_dist, context.ReadValue<Vector2>().y * camera_dist, -10);
-        //cam_position = context.ReadValue<Vector2>();
+        if (game.gameState == GameStates.RoundPlay)
+        {
+            if (context.control.name == "position") //normalize vector if mouse
+            {
+                float camh = Screen.height / 2;
+                float camw = Screen.width / 2;
+                float camx = Mathf.Clamp((context.ReadValue<Vector2>().x - camw) / camw, -1, 1);
+                float camy = Mathf.Clamp((context.ReadValue<Vector2>().y - camh) / camh, -1, 1);
+                cam.localPosition = new Vector3(camx * camera_dist, camy * camera_dist, -10);
+            }
+            else //for joysticks and such
+                cam.localPosition = new Vector3(context.ReadValue<Vector2>().x * camera_dist, context.ReadValue<Vector2>().y * camera_dist, -10);
+        }
     }
 
+    /// <summary>
+    /// handles pressing any of the 'move' buttons/joystick
+    /// </summary>
+    /// <param name="context"></param>
     public void OnMove(CallbackContext context)
     {
-        if (mover != null && game.gameState != "Round_End")
+        if (mover != null && game.gameState == GameStates.RoundPlay)
         {
             mover.inputVector = context.ReadValue<Vector2>();
         }
     }
 
+    /// <summary>
+    /// handles pressing the 'grab' button
+    /// </summary>
+    /// <param name="context"></param>
     public void OnGrab(CallbackContext context)
     {
-        if (mover != null && game.gameState != "Round_End")
+       // Debug.Log("grab context = " + context.ReadValue<float>());
+        if (mover != null && game.gameState == GameStates.RoundPlay)
             mover.grab = context.ReadValue<float>();
     }
 
-    public void OnSell(CallbackContext context)
+    /// <summary>
+    /// handles holding the 'buy' button
+    /// </summary>
+    /// <param name="context"></param>
+    public void OnBuy(CallbackContext context)
     {
-        if (mover != null && game.gameState != "Round_End")
+        if (mover != null && game.gameState == GameStates.RoundPlay)
         {
-            Debug.Log("pee haha");
-
             if (context.ReadValue<float>() == 1 && inventory.atRegister)
-                inventory.selling = true;
+                inventory.buying = true;
             else
-            {
-                inventory.selling = false;
-            }
+                inventory.buying = false;
         }
     }
 
+    /// <summary>
+    /// handles pressing the 'drop' button
+    /// </summary>
+    /// <param name="context"></param>
     public void OnDrop(CallbackContext context)
     {
-        if (mover != null && game.gameState != "Round_End")
-        {
+        if (mover != null && game.gameState == GameStates.RoundPlay)
             if (context.ReadValue<float>() == 1 && !inventory.atRegister)
-            {
                 inventory.DropItem();
-            }
-        }
+    }
+    public void OnUsePowerup(CallbackContext context)
+    {
+
+    }
+    public void OnReverse(CallbackContext context)
+    {
+        if (mover != null && game.gameState == GameStates.RoundPlay)
+            mover.reverse = context.ReadValue<float>();
     }
 }

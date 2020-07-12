@@ -1,12 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
+public enum Power_Ups
+{
+    Grabber,
+    Scanner,
+    Boost,
+    Shield
+}
 
 public class ItemManager : MonoBehaviour
 {
-    [SerializeField]
+    [HideInInspector]
     public List<StoreItem> items = new List<StoreItem>();
-
     [SerializeField]
     int maxItems = 3;
 
@@ -22,55 +30,76 @@ public class ItemManager : MonoBehaviour
     GameObject droppeditem;
 
     //register stuff
+    [HideInInspector]
     public bool atRegister;
-    public bool selling;
-    float selltimer = 0;
+    [HideInInspector]
+    public bool buying;
+    float buytimer = 0;
     [SerializeField]
-    float max_selltime = 2f;
+    float max_buytime = 2f;
     [SerializeField]
     Transform healthbar;
 
+    //round/scoring stuff
     RoundManager round;
+    public int p_index;
 
-    private void Awake()
+    [SerializeField]
+    Image PUIcon;
+
+    private void Start()
     {
-        round = FindObjectsOfType<RoundManager>()[0];
+        round = FindObjectsOfType<RoundManager>()[0];//grabs the round manager
     }
 
+    /// <summary>
+    /// handles buying 
+    /// </summary>
     private void Update()
     {
-        if (selling && items.Count > 0)
+        if (buying && items.Count > 0) //if selling and is possible to sell
         {
-            selltimer += Time.deltaTime;
+            buytimer += Time.deltaTime;
 
+            //makes bar visible and locally unmoving
             healthbar.parent.gameObject.SetActive(true);
             healthbar.parent.rotation = Quaternion.Euler(0, 0, 0);
 
             //setting the filling to go form one end to the other
-            healthbar.localScale = new Vector3(selltimer / max_selltime, healthbar.localScale.y, healthbar.localScale.z);
-            healthbar.localPosition = new Vector3(0.5f * (selltimer / max_selltime) -0.5f, healthbar.localPosition.y, healthbar.localPosition.z);
-            if(selltimer >= max_selltime)
+            healthbar.localScale = new Vector3(buytimer / max_buytime, healthbar.localScale.y, healthbar.localScale.z);
+            healthbar.localPosition = new Vector3(0.5f * (buytimer / max_buytime) -0.5f, healthbar.localPosition.y, healthbar.localPosition.z);
+            if(buytimer >= max_buytime)
             {
-                Debug.Log("bleh");
-                round.player_scores[GetComponent<Movement>().GetPlayerIndex()] += RemoveTop().point_value;
+                Debug.Log("Bought item");
+                round.player_scores[p_index] += RemoveTop().point_value;
 
-                selltimer = 0;
+                buytimer = 0;
             }
         }
         else
         {
-            selltimer = 0;
+            //reset values when no longer selling
+            buytimer = 0;
             healthbar.parent.gameObject.SetActive(false);  
         }
     }
 
+    /// <summary>
+    /// checks if possible to add an item to cart, adds it and sets image if so.
+    /// </summary>
+    /// <param name="item">Item object to be added</param>
+    /// <returns></returns>
     public bool AddItem(StoreItem item)
     {
-        if (items.Count < maxItems)
+        if (item.group == "Power_Up")
+        {
+
+        }
+        else if (items.Count < maxItems)//checks to see if cart is full
         {
             items.Add(item);
-            Debug.Log(items.Count);
-            switch (items.Count)
+            Debug.Log("item count: "+items.Count);
+            switch (items.Count)//sets the cart image with random rotation
             {
                 case 1:
                     bottom.transform.Rotate(Vector3.back * Random.Range(0, 360));
@@ -90,17 +119,24 @@ public class ItemManager : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// calls RemoveTop and creates a floor item object
+    /// </summary>
     public void DropItem()
     {
         if (items.Count > 0)
         {
             int item = RemoveTop().index;
-            droppeditem.GetComponent<ShelfManager>().item_index = item;
+            droppeditem.GetComponent<ItemDispenser>().item_index = item;
             Instantiate(droppeditem, transform.position, transform.rotation);
         }
 
     }
 
+    /// <summary>
+    /// removes top last inserted item from cart and sets its sprite on the stack to null
+    /// </summary>
+    /// <returns></returns>
     public StoreItem RemoveTop()
     {
         switch (items.Count)
