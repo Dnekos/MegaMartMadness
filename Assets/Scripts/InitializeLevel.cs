@@ -9,6 +9,8 @@ public class InitializeLevel : MonoBehaviour
     Transform[] spawnPoints;
     [SerializeField]
     GameObject playerPrefab;
+    [SerializeField]
+    GameObject enemyPrefab;
 
 
 
@@ -38,9 +40,9 @@ public class InitializeLevel : MonoBehaviour
                     player.GetComponentInChildren<Camera>().rect = new Rect((i % 2) * 0.5f, 0, 0.5f, 1);
             }
             else if (PlayerConfigs.Length == 2)
-            {
                 player.GetComponentInChildren<Camera>().rect = new Rect((i % 2) * .5f, 0, 0.5f, 1);
-            }
         }
+        for (int i = 3; i > PlayerConfigs.Length-1; i--)
+            Instantiate(enemyPrefab, spawnPoints[i].position, spawnPoints[i].rotation, gameObject.transform);
     }
 }

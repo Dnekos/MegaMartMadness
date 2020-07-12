@@ -391,12 +391,14 @@ namespace Pathfinding {
 		/// If rigidbodies are used then all movement happens here.
 		/// </summary>
 		protected virtual void FixedUpdate () {
-			if (!(rigid == null && rigid2D == null) && canMove) {
+            
+            if (!(rigid == null && rigid2D == null) && canMove) {
 				Vector3 nextPosition;
 				Quaternion nextRotation;
 				MovementUpdate(Time.fixedDeltaTime, out nextPosition, out nextRotation);
 				FinalizeMovement(nextPosition, nextRotation);
 			}
+            
 		}
 
 		/// <summary>\copydoc Pathfinding::IAstarAI::MovementUpdate</summary>

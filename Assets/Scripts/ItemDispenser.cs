@@ -12,6 +12,8 @@ public class ItemDispenser : MonoBehaviour
     public bool filled = false;
 
     [SerializeField]
+    SpriteRenderer obj;
+    [SerializeField]
     Sprite filledimage;
     [SerializeField]
     Sprite emptyimage;
@@ -26,10 +28,10 @@ public class ItemDispenser : MonoBehaviour
             {
                 filledimage = stocked_item.image;
             }
-            gameObject.GetComponent<SpriteRenderer>().sprite = filledimage;
+            obj.sprite = filledimage;
         }
         else
-            gameObject.GetComponent<SpriteRenderer>().sprite = emptyimage;
+            obj.sprite = emptyimage;
     }
 
     /// <summary>
@@ -39,7 +41,7 @@ public class ItemDispenser : MonoBehaviour
     private void OnTriggerStay2D(Collider2D collision)
     {
         Movement player = collision.GetComponent<Movement>();//grab Movement data from collision
-        if (collision.tag == "Player" && filled && player.grab == 1) //if collision is with a player & grab is held down
+        if (collision.tag == "Player" && filled && (player.grab == 1)) //|| collision.GetComponent<EnemyMovement>())) //if collision is with a player & grab is held down
         {
             if (collision.GetComponent<ItemManager>().AddItem(stocked_item))
             {
@@ -50,7 +52,7 @@ public class ItemDispenser : MonoBehaviour
                 if (emptyimage == null)
                     Destroy(gameObject);
                 else //else, show the empty sprite
-                    gameObject.GetComponent<SpriteRenderer>().sprite = emptyimage;
+                    obj.sprite = emptyimage;
             }
         }
     }
@@ -65,6 +67,6 @@ public class ItemDispenser : MonoBehaviour
         item_index = newIndex;
         stocked_item = new StoreItem(item_index);
         filled = true;
-        gameObject.GetComponent<SpriteRenderer>().sprite = filledimage;
+        obj.sprite = filledimage;
     }
 }

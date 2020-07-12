@@ -16,7 +16,7 @@ public class ItemManager : MonoBehaviour
     [HideInInspector]
     public List<StoreItem> items = new List<StoreItem>();
     [SerializeField]
-    int maxItems = 3;
+    public int maxItems = 3;
 
     //cart sprites
     [SerializeField]

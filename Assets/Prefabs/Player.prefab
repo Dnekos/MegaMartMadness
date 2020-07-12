@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 473960221506447026}
   - component: {fileID: 8892949293569957602}
   - component: {fileID: 1767010929737408896}
+  - component: {fileID: 2828794497789765548}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -119,8 +120,8 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 1
-  m_Mass: 10.198119
-  m_LinearDrag: 0.05
+  m_Mass: 13.543835
+  m_LinearDrag: 2
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
@@ -135,7 +136,7 @@ CircleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 219958920374280149}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
@@ -144,6 +145,22 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.7
+--- !u!70 &2828794497789765548
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 219958920374280149}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0.7625389}
+  m_Size: {x: 2.1528091, y: 2.7311697}
+  m_Direction: 0
 --- !u!1 &1705614853477101921
 GameObject:
   m_ObjectHideFlags: 0

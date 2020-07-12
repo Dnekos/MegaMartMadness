@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Pathfinding;
 
 public enum StatusConditions
 {
@@ -19,7 +20,7 @@ public class Movement : MonoBehaviour
     [SerializeField]
     bool ReverseControls;
 
-    [HideInInspector]
+    
     public Vector2 inputVector;
     [HideInInspector]
     public float grab = 0;
@@ -55,6 +56,8 @@ public class Movement : MonoBehaviour
     int reverse_allowance = 25;
     public float reverse;
 
+    //for enemies
+
     private void Start()
     {
         temp_drag = 1f;
@@ -68,8 +71,7 @@ public class Movement : MonoBehaviour
             //gives the speed 
             speed += inputVector.y * (acceleration * Time.deltaTime) * temp_speed;
 
-            if (Mathf.Abs(speed) > maxSpeed)
-                speed = maxSpeed;
+            speed = Mathf.Clamp(speed, maxSpeed * -1, maxSpeed);
             transform.Translate(Vector2.up * speed, Space.Self);
 
             //gives it the drag
@@ -149,10 +151,7 @@ public class Movement : MonoBehaviour
             float angle;
             newturnspeed += inputVector.magnitude * turnAcceleration * Time.deltaTime * temp_speed;
 
-           // if (reverse == 0)
-                angle = Mathf.LerpAngle(transform.eulerAngles.z, target_degree, newturnspeed);
-           // else
-           //     angle = Mathf.LerpAngle(transform.eulerAngles.z, target_degree + 180, newturnspeed);
+            angle = Mathf.LerpAngle(transform.eulerAngles.z, target_degree, newturnspeed);
             if (inputVector != Vector2.zero)
                 transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
             newturnspeed *= Drag * temp_drag;

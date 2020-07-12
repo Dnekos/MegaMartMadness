@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: 2999183093532007047}
   - component: {fileID: 2999183093532007046}
   - component: {fileID: 9021968973999505418}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Aisle_Shelf
-  m_TagString: Untagged
+  m_TagString: Shelf
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
