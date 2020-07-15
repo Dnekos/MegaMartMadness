@@ -7,7 +7,6 @@ using UnityEngine.InputSystem;
 
 public class InputHandler : MonoBehaviour
 {
-
     public PlayerConfiguration playerConfig;
     private PlayerControl controls;
 
@@ -110,9 +109,7 @@ public class InputHandler : MonoBehaviour
     public void OnMove(CallbackContext context)
     {
         if (mover != null && game.gameState == GameStates.RoundPlay)
-        {
             mover.inputVector = context.ReadValue<Vector2>();
-        }
     }
 
     /// <summary>
@@ -122,8 +119,8 @@ public class InputHandler : MonoBehaviour
     public void OnGrab(CallbackContext context)
     {
        // Debug.Log("grab context = " + context.ReadValue<float>());
-        if (mover != null && game.gameState == GameStates.RoundPlay)
-            mover.grab = context.ReadValue<float>();
+        if (inventory != null && game.gameState == GameStates.RoundPlay)
+            inventory.grab = context.ReadValue<float>();
     }
 
     /// <summary>

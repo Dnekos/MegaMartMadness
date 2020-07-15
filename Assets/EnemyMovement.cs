@@ -8,25 +8,12 @@ public class EnemyMovement : MonoBehaviour
     public AIDestinationSetter target;
     public AIPath ai;
     public Seeker Thepath;
-    public Movement mover;
     public ItemManager inventory;
 
-    /*
-    private float speed;
-    private float acceleration;
-    private float temp_speed;
-    private int maxSpeed;
-    private int temp_drag;
-    private float turnSpeed;
-    private int turnAcceleration;
-    private float minSpeed;
-
-    public int Drag { get; private set; }
-    */
     // Update is called once per frame
     void Update()
     {
-        mover.grab = 0;
+        inventory.grab = 0;
         if (inventory.atRegister)
             inventory.buying = true;
         else
@@ -46,9 +33,7 @@ public class EnemyMovement : MonoBehaviour
             {
                 Debug.Log("ended path");
                 if (target.target.tag == "Shelf")
-                    mover.grab = 1;
-
-               // target.target = null;
+                    inventory.grab = 1;
             }
         }
         //finding targets

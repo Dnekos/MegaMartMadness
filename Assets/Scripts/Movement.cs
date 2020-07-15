@@ -22,8 +22,6 @@ public class Movement : MonoBehaviour
 
     
     public Vector2 inputVector;
-    [HideInInspector]
-    public float grab = 0;
 
     //adjustables
     [SerializeField]
@@ -55,8 +53,6 @@ public class Movement : MonoBehaviour
     [SerializeField]
     int reverse_allowance = 25;
     public float reverse;
-
-    //for enemies
 
     private void Start()
     {
@@ -117,9 +113,7 @@ public class Movement : MonoBehaviour
             newturnspeed += inputVector.magnitude * turnAcceleration * Time.deltaTime * temp_speed;
 
             if (fob)
-            {
                 angle = Mathf.LerpAngle(transform.eulerAngles.z, target_degree, newturnspeed);
-            }
             else
                 angle = Mathf.LerpAngle(transform.eulerAngles.z, target_degree + 180, newturnspeed);
             transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);

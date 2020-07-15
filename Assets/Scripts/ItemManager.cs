@@ -18,6 +18,9 @@ public class ItemManager : MonoBehaviour
     [SerializeField]
     public int maxItems = 3;
 
+    [HideInInspector]
+    public float grab = 0;
+
     //cart sprites
     [SerializeField]
     SpriteRenderer bottom;

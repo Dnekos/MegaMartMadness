@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 3028782811197128856}
   - component: {fileID: 3028782811197128863}
   - component: {fileID: 3028782811197128862}
-  - component: {fileID: 3028782811197128860}
   - component: {fileID: 3028782811197128867}
   - component: {fileID: 3028782811197128857}
   - component: {fileID: 3028782811197128861}
@@ -108,32 +107,6 @@ MonoBehaviour:
   slowWhenNotFacingTarget: 1
   whenCloseToDestination: 0
   constrainInsideGraph: 0
---- !u!114 &3028782811197128860
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3028782811197128866}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4acdffb369865344ea58712e14c1f0ae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TankControls: 1
-  ReverseControls: 0
-  inputVector: {x: 0, y: 0}
-  grab: 0
-  Drag: 0.95
-  acceleration: 0.6
-  maxSpeed: 10
-  minSpeed: 0.02
-  turnAcceleration: 10
-  temp_drag: 1
-  temp_speed: 1
-  temp_translate: {x: 0, y: 0}
-  reverse_allowance: 25
-  reverse: 0
 --- !u!114 &3028782811197128867
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -198,6 +171,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxItems: 3
+  grab: 0
   bottom: {fileID: 5320235820925701283}
   mid: {fileID: 3771623915374327619}
   top: {fileID: 3517124849594181815}
@@ -224,7 +198,6 @@ MonoBehaviour:
   target: {fileID: 3028782811197128867}
   ai: {fileID: 3028782811197128862}
   Thepath: {fileID: 3028782811197128863}
-  mover: {fileID: 3028782811197128860}
   inventory: {fileID: 3028782811197128859}
 --- !u!70 &3028782811197128852
 CapsuleCollider2D:

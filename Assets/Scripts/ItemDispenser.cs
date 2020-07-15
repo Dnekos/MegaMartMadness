@@ -40,10 +40,10 @@ public class ItemDispenser : MonoBehaviour
     /// <param name="collision"></param>
     private void OnTriggerStay2D(Collider2D collision)
     {
-        Movement player = collision.GetComponent<Movement>();//grab Movement data from collision
+        ItemManager player = collision.GetComponent<ItemManager>();//grab Movement data from collision
         if (collision.tag == "Player" && filled && (player.grab == 1)) //|| collision.GetComponent<EnemyMovement>())) //if collision is with a player & grab is held down
         {
-            if (collision.GetComponent<ItemManager>().AddItem(stocked_item))
+            if (player.AddItem(stocked_item))
             {
                 filled = false;
                 Debug.Log("grabbed");
