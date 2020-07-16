@@ -11,7 +11,6 @@ public class ItemDispenser : MonoBehaviour
     [SerializeField]
     public bool filled = false;
 
-    [SerializeField]
     SpriteRenderer obj;
     [SerializeField]
     Sprite filledimage;
@@ -20,6 +19,7 @@ public class ItemDispenser : MonoBehaviour
 
     private void Start()
     {
+        obj = GetComponentInParent<SpriteRenderer>();
         if (item_index != 0)//if stocked, show that
         {
             stocked_item = new StoreItem(item_index);
@@ -41,7 +41,7 @@ public class ItemDispenser : MonoBehaviour
     private void OnTriggerStay2D(Collider2D collision)
     {
         ItemManager player = collision.GetComponent<ItemManager>();//grab Movement data from collision
-        if (collision.tag == "Player" && filled && (player.grab == 1)) //|| collision.GetComponent<EnemyMovement>())) //if collision is with a player & grab is held down
+        if (collision.tag == "Player" && filled && (player.grab == 1)) //if collision is with a player & grab is held down
         {
             if (player.AddItem(stocked_item))
             {

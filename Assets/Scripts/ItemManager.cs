@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public enum Power_Ups
 {
+    Empty = -1,
     Grabber,
     Scanner,
     Boost,
@@ -13,15 +14,19 @@ public enum Power_Ups
 
 public class ItemManager : MonoBehaviour
 {
-    [HideInInspector]
-    public List<StoreItem> items = new List<StoreItem>();
+    [SerializeField]
+    bool player_controlled;
+
+    [Header("ItemStorage")]
     [SerializeField]
     public int maxItems = 3;
+    [HideInInspector]
+    public List<StoreItem> items = new List<StoreItem>();
 
     [HideInInspector]
     public float grab = 0;
 
-    //cart sprites
+    //sprites
     [SerializeField]
     SpriteRenderer bottom;
     [SerializeField]
@@ -32,23 +37,32 @@ public class ItemManager : MonoBehaviour
     [SerializeField]
     GameObject droppeditem;
 
-    //register stuff
+    [Header("Purchasing")]
+    [SerializeField]
+    float max_buytime = 2f;
+    [SerializeField]
+    Transform healthbar;
     [HideInInspector]
     public bool atRegister;
     [HideInInspector]
     public bool buying;
     float buytimer = 0;
-    [SerializeField]
-    float max_buytime = 2f;
-    [SerializeField]
-    Transform healthbar;
 
     //round/scoring stuff
     RoundManager round;
+    [HideInInspector]
     public int p_index;
 
+    [Header("PowerUps")]
     [SerializeField]
     Image PUIcon;
+    Power_Ups heldPU = Power_Ups.Empty;
+
+    [SerializeField]
+    float BoostMaxtimer = 3f;
+    float BoostC_Timer;
+    [SerializeField]
+    float BoostPower = 1.5f;
 
     private void Start()
     {
@@ -60,6 +74,13 @@ public class ItemManager : MonoBehaviour
     /// </summary>
     private void Update()
     {
+        if (BoostC_Timer > 0)
+        {
+            BoostC_Timer -= Time.deltaTime;
+            if (BoostC_Timer <= 0)
+                GetComponent<Movement>().temp_speed /= BoostPower;
+        }
+
         if (buying && items.Count > 0) //if selling and is possible to sell
         {
             buytimer += Time.deltaTime;
@@ -94,9 +115,18 @@ public class ItemManager : MonoBehaviour
     /// <returns></returns>
     public bool AddItem(StoreItem item)
     {
-        if (item.group == "Power_Up")
+        if (item.group == "Power_Up" && heldPU == Power_Ups.Empty)
         {
+            //Debug.Log("grabbed PU");
+            heldPU = (Power_Ups)(item.index - 16);
 
+            if (player_controlled)
+            {
+                Debug.Log(heldPU + "_icon");
+                PUIcon.enabled = true;
+                PUIcon.sprite = Resources.Load<Sprite>(heldPU + "_icon");
+            }
+            return true;
         }
         else if (items.Count < maxItems)//checks to see if cart is full
         {
@@ -133,7 +163,6 @@ public class ItemManager : MonoBehaviour
             droppeditem.GetComponent<ItemDispenser>().item_index = item;
             Instantiate(droppeditem, transform.position, transform.rotation);
         }
-
     }
 
     /// <summary>
@@ -157,5 +186,27 @@ public class ItemManager : MonoBehaviour
         StoreItem item = items[items.Count - 1];
         items.Remove(item);
         return item;
+    }
+
+    public void UsePowerup()
+    {
+        if(player_controlled && heldPU != Power_Ups.Empty)
+        {
+            switch (heldPU)
+            {
+                case Power_Ups.Boost:
+                    BoostC_Timer = BoostMaxtimer;
+                    GetComponent<Movement>().temp_speed *= BoostPower;
+                    break;
+                case Power_Ups.Grabber:
+                    break;
+                case Power_Ups.Scanner:
+                    break;
+                case Power_Ups.Shield:
+                    break;
+            }
+            heldPU = Power_Ups.Empty;
+            PUIcon.enabled = false;
+        }
     }
 }

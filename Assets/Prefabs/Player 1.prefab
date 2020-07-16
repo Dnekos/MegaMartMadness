@@ -72,7 +72,6 @@ MonoBehaviour:
   TankControls: 0
   ReverseControls: 1
   inputVector: {x: 0, y: 0}
-  grab: 0
   Drag: 0.95
   acceleration: 0.7
   maxSpeed: 10
@@ -95,7 +94,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a000317403242a4abfbc3544e1a303b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player_controlled: 1
   maxItems: 3
+  grab: 0
   bottom: {fileID: 3389512371313975950}
   mid: {fileID: 5948074465540888942}
   top: {fileID: 6202555833656624794}

@@ -15,7 +15,7 @@ public class InputHandler : MonoBehaviour
     private ItemManager inventory;
     private RoundManager game;
 
-    //camera stuff
+    [Header("Camera")]
     [SerializeField]
     private Transform cam;
     [SerializeField]
@@ -77,7 +77,6 @@ public class InputHandler : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        //cam.rotation = Quaternion.Euler(0, 0, 0);//locks camera rotation as it is a child of the player
         camholder.rotation = Quaternion.Euler(0, 0, 0);
     }
 
@@ -118,7 +117,6 @@ public class InputHandler : MonoBehaviour
     /// <param name="context"></param>
     public void OnGrab(CallbackContext context)
     {
-       // Debug.Log("grab context = " + context.ReadValue<float>());
         if (inventory != null && game.gameState == GameStates.RoundPlay)
             inventory.grab = context.ReadValue<float>();
     }
@@ -129,7 +127,7 @@ public class InputHandler : MonoBehaviour
     /// <param name="context"></param>
     public void OnBuy(CallbackContext context)
     {
-        if (mover != null && game.gameState == GameStates.RoundPlay)
+        if (inventory != null && game.gameState == GameStates.RoundPlay)
         {
             if (context.ReadValue<float>() == 1 && inventory.atRegister)
                 inventory.buying = true;
@@ -144,13 +142,15 @@ public class InputHandler : MonoBehaviour
     /// <param name="context"></param>
     public void OnDrop(CallbackContext context)
     {
-        if (mover != null && game.gameState == GameStates.RoundPlay)
+        if (inventory != null && game.gameState == GameStates.RoundPlay)
             if (context.ReadValue<float>() == 1 && !inventory.atRegister)
                 inventory.DropItem();
     }
     public void OnUsePowerup(CallbackContext context)
     {
-
+        if (inventory != null && game.gameState == GameStates.RoundPlay)
+            if (context.ReadValue<float>() == 1)
+                inventory.UsePowerup();
     }
     public void OnReverse(CallbackContext context)
     {
