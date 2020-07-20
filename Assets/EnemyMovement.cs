@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Pathfinding;
+using System.Linq;
 
 public class EnemyMovement : MonoBehaviour
 {
@@ -9,16 +10,39 @@ public class EnemyMovement : MonoBehaviour
     public AIPath ai;
     public Seeker Thepath;
     public ItemManager inventory;
+    public int pathtag;
+
+    private void Start()
+    {
+        //adding the tag to seeker, so that it knows it can walk on itself
+        //|= is a bitmask version of +=, no idea why
+        Thepath.traversableTags |= pathtag;
+    }
 
     // Update is called once per frame
     void Update()
     {
+        //sets the area just a bit bigger than the seeker to default tag
+        GraphUpdateObject bigguo = new GraphUpdateObject(new Bounds(transform.position, 
+            new Vector3(ai.radius, ai.radius) * 1.1f));
+        bigguo.modifyTag = true;
+        bigguo.setTag = 0;
+        AstarPath.active.UpdateGraphs(bigguo);
+
+        //sets the area in the seeker to P1 tag
+        GraphUpdateObject guo = new GraphUpdateObject(new Bounds(transform.position, 
+            new Vector3(ai.radius, ai.radius)));
+        guo.modifyTag = true;
+        guo.setTag = pathtag;
+
+        AstarPath.active.UpdateGraphs(guo);
+
         inventory.grab = 0;
         if (inventory.atRegister)
             inventory.buying = true;
         else
             inventory.buying = false;
-    
+
         if (ai.hasPath)
         {
             //rotations
@@ -38,13 +62,13 @@ public class EnemyMovement : MonoBehaviour
         }
         //finding targets
         if (inventory.items.Count < inventory.maxItems)
-            //target.target = FindClosestShelf().transform;
-            target.target = FindRandomShelf().transform;
+            target.target = FindClosestShelf().transform;
+            //target.target = FindRandomShelf().transform;
         else
             target.target = FindClosestRegister().transform;
     }
 
-    /*public GameObject FindClosestShelf()
+    public GameObject FindClosestShelf()
     {
         GameObject[] gos;
         gos = GameObject.FindGameObjectsWithTag("Shelf");
@@ -62,11 +86,11 @@ public class EnemyMovement : MonoBehaviour
             }
         }
         return closest;
-    }*/
+    }
     public GameObject FindRandomShelf()
     {
         GameObject[] shelves = GameObject.FindGameObjectsWithTag("Shelf");
-        return shelves[RandomNumber(0, shelves.Length)];
+        return shelves[Random.Range(0, shelves.Length)];
     }
 
     public GameObject FindClosestRegister()

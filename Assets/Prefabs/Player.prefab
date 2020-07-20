@@ -13,9 +13,8 @@ GameObject:
   - component: {fileID: 2270532992154697309}
   - component: {fileID: 473960221506447026}
   - component: {fileID: 8892949293569957602}
-  - component: {fileID: 1767010929737408896}
   - component: {fileID: 2828794497789765548}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -73,7 +72,6 @@ MonoBehaviour:
   TankControls: 1
   ReverseControls: 0
   inputVector: {x: 0, y: 0}
-  grab: 0
   Drag: 0.95
   acceleration: 0.6
   maxSpeed: 10
@@ -97,6 +95,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxItems: 3
+  grab: 0
   bottom: {fileID: 3389512371313975950}
   mid: {fileID: 5948074465540888942}
   top: {fileID: 6202555833656624794}
@@ -129,22 +128,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!58 &1767010929737408896
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 219958920374280149}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.7
 --- !u!70 &2828794497789765548
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

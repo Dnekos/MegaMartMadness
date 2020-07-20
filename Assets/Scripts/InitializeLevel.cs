@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Pathfinding;
 
 public class InitializeLevel : MonoBehaviour
 {
@@ -11,8 +12,6 @@ public class InitializeLevel : MonoBehaviour
     GameObject playerPrefab;
     [SerializeField]
     GameObject enemyPrefab;
-
-
 
     /// <summary>
     /// spawns in the player objects and starts the process of initializing them
@@ -42,7 +41,11 @@ public class InitializeLevel : MonoBehaviour
             else if (PlayerConfigs.Length == 2)
                 player.GetComponentInChildren<Camera>().rect = new Rect((i % 2) * .5f, 0, 0.5f, 1);
         }
-        for (int i = 3; i > PlayerConfigs.Length-1; i--)
+
+        for (int i = 3; i > PlayerConfigs.Length - 1; i--)
+        {
+            enemyPrefab.GetComponent<EnemyMovement>().pathtag = (1 << (i+1));
             Instantiate(enemyPrefab, spawnPoints[i].position, spawnPoints[i].rotation, gameObject.transform);
+        }
     }
 }

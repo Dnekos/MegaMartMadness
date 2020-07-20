@@ -17,7 +17,8 @@ GameObject:
   - component: {fileID: 3028782811197128859}
   - component: {fileID: 3028782811197128858}
   - component: {fileID: 3028782811197128852}
-  m_Layer: 0
+  - component: {fileID: 5032355044460746321}
+  m_Layer: 9
   m_Name: Opponent
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -67,7 +68,7 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 4294967295
     useGraphRaycasting: 0
-  traversableTags: -1
+  traversableTags: 1
   tagPenalties: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
   graphMask:
     value: -1
@@ -199,6 +200,7 @@ MonoBehaviour:
   ai: {fileID: 3028782811197128862}
   Thepath: {fileID: 3028782811197128863}
   inventory: {fileID: 3028782811197128859}
+  pathtag: 4
 --- !u!70 &3028782811197128852
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -215,6 +217,28 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: -0.51}
   m_Size: {x: 2.1528091, y: 2.7311697}
   m_Direction: 0
+--- !u!114 &5032355044460746321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3028782811197128866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb6a34d769a1e4ac7b0b30e433aa443c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 1
+  smoothType: 1
+  subdivisions: 2
+  iterations: 2
+  strength: 0.305
+  uniformLength: 1
+  maxSegmentLength: 2
+  bezierTangentLength: 0.4
+  offset: 0.2
+  factor: 0.1
 --- !u!1 &3066614340886652255
 GameObject:
   m_ObjectHideFlags: 0

@@ -62,6 +62,19 @@ public class Movement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        //sets the area just a bit bigger than the collider to default tag
+        GraphUpdateObject bigguo = new GraphUpdateObject(new Bounds(GetComponent<Collider2D>().bounds.center, 
+            GetComponent<Collider2D>().bounds.extents*1.1f));
+        bigguo.modifyTag = true;
+        bigguo.setTag = 0;
+        AstarPath.active.UpdateGraphs(bigguo);
+
+        //sets the area in the collider to P1 tag
+        GraphUpdateObject guo = new GraphUpdateObject(GetComponent<Collider2D>().bounds);
+        guo.modifyTag = true;
+        guo.setTag = 1;
+        AstarPath.active.UpdateGraphs(guo);
+
         if (TankControls)
         {
             //gives the speed 
