@@ -38,12 +38,13 @@ public class EnemyMovement : MonoBehaviour
         }
         //finding targets
         if (inventory.items.Count < inventory.maxItems)
-            target.target = FindClosestShelf().transform;
+            //target.target = FindClosestShelf().transform;
+            target.target = FindRandomShelf().transform;
         else
             target.target = FindClosestRegister().transform;
     }
 
-    public GameObject FindClosestShelf()
+    /*public GameObject FindClosestShelf()
     {
         GameObject[] gos;
         gos = GameObject.FindGameObjectsWithTag("Shelf");
@@ -61,7 +62,13 @@ public class EnemyMovement : MonoBehaviour
             }
         }
         return closest;
+    }*/
+    public GameObject FindRandomShelf()
+    {
+        GameObject[] shelves = GameObject.FindGameObjectsWithTag("Shelf");
+        return shelves[RandomNumber(0, shelves.Length)];
     }
+
     public GameObject FindClosestRegister()
     {
         GameObject[] gos;
