@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Pathfinding;
 
 public class InitializeLevel : MonoBehaviour
 {
@@ -12,21 +13,20 @@ public class InitializeLevel : MonoBehaviour
     [SerializeField]
     GameObject enemyPrefab;
 
-    [Header("Debug")]
-    [SerializeField]
-    bool SpawnEnemiesAtStart;
-
-
-
     /// <summary>
     /// spawns in the player objects and starts the process of initializing them
     /// </summary>
     void Start()
     {
         PlayerConfiguration[] PlayerConfigs = { };
-        try { PlayerConfigs = PlayerConfigManager.Instance.GetPlayerConfigs().ToArray(); }
-        catch { SceneManager.LoadScene("PlayerSelect"); }
-
+        try
+        {
+             PlayerConfigs = PlayerConfigManager.Instance.GetPlayerConfigs().ToArray();
+        }
+        catch
+        {
+            SceneManager.LoadScene("PlayerSelect");
+        }
         for (int i = 0; i < PlayerConfigs.Length;i++)
         {
             var player = Instantiate(playerPrefab, spawnPoints[i].position, spawnPoints[i].rotation, gameObject.transform);
@@ -41,11 +41,11 @@ public class InitializeLevel : MonoBehaviour
             else if (PlayerConfigs.Length == 2)
                 player.GetComponentInChildren<Camera>().rect = new Rect((i % 2) * .5f, 0, 0.5f, 1);
         }
-        if (SpawnEnemiesAtStart)
-            for (int i = 3; i > PlayerConfigs.Length - 1; i--)
-            {
-                enemyPrefab.GetComponent<ItemManager>().p_index = i;
-                Instantiate(enemyPrefab, spawnPoints[i].position, spawnPoints[i].rotation, gameObject.transform);
-            }
+
+        for (int i = 3; i > PlayerConfigs.Length - 1; i--)
+        {
+            enemyPrefab.GetComponent<EnemyMovement>().pathtag = (1 << (i+1));
+            Instantiate(enemyPrefab, spawnPoints[i].position, spawnPoints[i].rotation, gameObject.transform);
+        }
     }
 }

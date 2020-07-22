@@ -13,9 +13,8 @@ GameObject:
   - component: {fileID: 2270532992154697309}
   - component: {fileID: 473960221506447026}
   - component: {fileID: 8892949293569957602}
-  - component: {fileID: 1767010929737408896}
   - component: {fileID: 2828794497789765548}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -70,6 +69,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4acdffb369865344ea58712e14c1f0ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TankControls: 1
+  ReverseControls: 0
   inputVector: {x: 0, y: 0}
   Drag: 0.95
   acceleration: 0.6
@@ -79,9 +80,7 @@ MonoBehaviour:
   temp_drag: 1
   temp_speed: 1
   temp_translate: {x: 0, y: 0}
-  TankControls: 1
-  ReverseControls: 0
-  reverse_allowance: 0
+  reverse_allowance: 25
   reverse: 0
 --- !u!114 &473960221506447026
 MonoBehaviour:
@@ -95,7 +94,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a000317403242a4abfbc3544e1a303b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player_controlled: 1
   maxItems: 3
   grab: 0
   bottom: {fileID: 3389512371313975950}
@@ -103,14 +101,12 @@ MonoBehaviour:
   top: {fileID: 6202555833656624794}
   droppeditem: {fileID: 7023457457445409154, guid: 917304bc1ade6a54e9f2aa07de48e1aa,
     type: 3}
-  max_buytime: 0.4
-  healthbar: {fileID: 2510358026327284298}
   atRegister: 0
   buying: 0
+  max_buytime: 0.4
+  healthbar: {fileID: 2510358026327284298}
   p_index: 0
   PUIcon: {fileID: 6289315060698603988}
-  BoostMaxtimer: 3
-  BoostPower: 1.5
 --- !u!50 &8892949293569957602
 Rigidbody2D:
   serializedVersion: 4
@@ -132,22 +128,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!58 &1767010929737408896
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 219958920374280149}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.7
 --- !u!70 &2828794497789765548
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -175,7 +155,7 @@ GameObject:
   - component: {fileID: 5293117564278425491}
   - component: {fileID: 2751544850148176939}
   - component: {fileID: 7983410683821361453}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -271,7 +251,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1225064214318280869}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: CameraStabilizer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -304,7 +284,7 @@ GameObject:
   - component: {fileID: 4518439358353535887}
   - component: {fileID: 73419793585320557}
   - component: {fileID: 6289315060698603988}
-  m_Layer: 8
+  m_Layer: 5
   m_Name: PUImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -377,7 +357,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1854855363299296539}
   - component: {fileID: 5948074465540888942}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Item2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -458,7 +438,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4780589610335426656}
   - component: {fileID: 3389512371313975950}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: item3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -539,7 +519,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7005678685802606883}
   - component: {fileID: 6202555833656624794}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Item1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -620,7 +600,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2510358026327284298}
   - component: {fileID: 5076226511711947808}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: HealthBarFill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -701,7 +681,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7896749093193379208}
   - component: {fileID: 8918774564256406695}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: HealthBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -784,7 +764,7 @@ GameObject:
   - component: {fileID: 9094636805224827462}
   - component: {fileID: 2395711925958450386}
   - component: {fileID: 8145297835002794468}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -867,7 +847,7 @@ GameObject:
   - component: {fileID: 3728830633558922791}
   - component: {fileID: 3913646756554926407}
   - component: {fileID: 1448531519721612788}
-  m_Layer: 8
+  m_Layer: 5
   m_Name: PUSlot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -943,7 +923,7 @@ GameObject:
   - component: {fileID: 313222234406143463}
   - component: {fileID: 5292761774489332653}
   - component: {fileID: 7739031360176805874}
-  m_Layer: 8
+  m_Layer: 5
   m_Name: PlayerCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
