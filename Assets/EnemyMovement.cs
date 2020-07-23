@@ -48,7 +48,7 @@ public class EnemyMovement : MonoBehaviour
             //rotations
             //Debug.Log(Thepath.GetCurrentPath().GetTotalLength());
             if (Thepath.GetCurrentPath().GetTotalLength() < 1.5)
-               transform.rotation = new Quaternion(0, 0, target.target.rotation.z - 180, 0);//prvents it sticking on the side of the shelf
+                transform.rotation = new Quaternion(0, 0, target.target.rotation.z - 180, 0);//prvents it sticking on the side of the shelf
             else
                 transform.up = ai.desiredVelocity;//sets rotation right
 
@@ -60,15 +60,18 @@ public class EnemyMovement : MonoBehaviour
                     inventory.grab = 1;
             }
         }
-        //finding targets
-        if (inventory.items.Count < inventory.maxItems)
-            target.target = FindClosestShelf().transform;
-            //target.target = FindRandomShelf().transform;
         else
-            target.target = FindClosestRegister().transform;
+        {
+            //finding targets
+            if (inventory.items.Count < inventory.maxItems)
+                //target.target = FindClosestShelf().transform;
+                target.target = FindRandomShelf().transform;
+            else
+                target.target = FindClosestRegister().transform;
+        }
     }
 
-    public GameObject FindClosestShelf()
+    /*public GameObject FindClosestShelf()
     {
         GameObject[] gos;
         gos = GameObject.FindGameObjectsWithTag("Shelf");
@@ -86,11 +89,16 @@ public class EnemyMovement : MonoBehaviour
             }
         }
         return closest;
-    }
+    }*/
     public GameObject FindRandomShelf()
     {
         GameObject[] shelves = GameObject.FindGameObjectsWithTag("Shelf");
-        return shelves[Random.Range(0, shelves.Length)];
+        GameObject targetShelf = shelves[Random.Range(0, shelves.Length)];
+        while (!targetShelf.GetComponentInParent<ItemDispenser>().filled)
+        {
+            targetShelf = shelves[Random.Range(0, shelves.Length)];
+        }
+        return targetShelf;
     }
 
     public GameObject FindClosestRegister()
