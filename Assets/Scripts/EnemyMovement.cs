@@ -45,14 +45,13 @@ public class EnemyMovement : MonoBehaviour
 
         if (ai.hasPath)
         {
-            //rotations
-            //Debug.Log(Thepath.GetCurrentPath().GetTotalLength());
-            if (Thepath.GetCurrentPath().GetTotalLength() < 1.5)
+            //rotation
+            /*if (ai.remainingDistance < 1.5) //depricated bug fix, but not deleted in case bug comes up again
                 transform.rotation = new Quaternion(0, 0, target.target.rotation.z - 180, 0);//prvents it sticking on the side of the shelf
-            else
-                transform.up = ai.desiredVelocity;//sets rotation right
+                else*/
+            transform.up = ai.desiredVelocity;//sets rotation right
 
-
+            
             if (ai.reachedEndOfPath)//when arrived at a shelf
             {
                 Debug.Log("ended path");
