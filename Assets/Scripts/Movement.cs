@@ -15,15 +15,10 @@ public enum StatusConditions
 
 public class Movement : MonoBehaviour
 {
-    [SerializeField]
-    bool TankControls;
-    [SerializeField]
-    bool ReverseControls;
-
-    
+   
     public Vector2 inputVector;
 
-    //adjustables
+    [Header("Adjustables")]
     [SerializeField]
     float Drag;
     [SerializeField]
@@ -46,6 +41,12 @@ public class Movement : MonoBehaviour
     public float temp_speed = 1f;
     [HideInInspector]
     public Vector2 temp_translate = Vector2.zero;
+
+    [Header("Alternate Movement")]
+    [SerializeField]
+    bool TankControls;
+    [SerializeField]
+    bool ReverseControls;
 
     Vector2 newspeed;
     float newturnspeed;

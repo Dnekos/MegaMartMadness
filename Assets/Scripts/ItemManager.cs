@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public enum Power_Ups
 {
+    Empty = -1,
     Grabber,
     Scanner,
     Boost,
@@ -13,46 +14,69 @@ public enum Power_Ups
 
 public class ItemManager : MonoBehaviour
 {
-    [HideInInspector]
-    public List<StoreItem> items = new List<StoreItem>();
+    [SerializeField]
+    bool player_controlled;
+
+    [Header("ItemStorage")]
     [SerializeField]
     public int maxItems = 3;
+    [HideInInspector]
+    public List<StoreItem> items = new List<StoreItem>();
 
     [HideInInspector]
     public float grab = 0;
 
-    //cart sprites
+    //sprites
     [SerializeField]
-    SpriteRenderer bottom;
-    [SerializeField]
-    SpriteRenderer mid;
-    [SerializeField]
-    SpriteRenderer top;
+    GameObject CartItem;
+    GameObject TopItem = null;
 
     [SerializeField]
     GameObject droppeditem;
 
-    //register stuff
+    [Header("Purchasing")]
+    [SerializeField]
+    float max_buytime = 2f;
+    [SerializeField]
+    Transform healthbar;
     [HideInInspector]
     public bool atRegister;
     [HideInInspector]
     public bool buying;
     float buytimer = 0;
-    [SerializeField]
-    float max_buytime = 2f;
-    [SerializeField]
-    Transform healthbar;
 
     //round/scoring stuff
     RoundManager round;
+    [HideInInspector]
     public int p_index;
 
+    [Header("PowerUps")]
     [SerializeField]
     Image PUIcon;
+    Power_Ups heldPU = Power_Ups.Empty;
+
+    [SerializeField]
+    float BoostDuration = 3f;
+    float BoostTimer = 0f;
+    [SerializeField]
+    float BoostPower = 1.5f;
+
+    [SerializeField]
+    float GrabRange = 5f;
+    [SerializeField]
+    GameObject Grabber;
+    [SerializeField]
+    float ShieldDuration = 5f;
+    float ShieldTimer = 0f;
+    [HideInInspector]
+    public bool Shielded = false;
+    [SerializeField]
+    SpriteRenderer ShieldImage;
 
     private void Start()
     {
         round = FindObjectsOfType<RoundManager>()[0];//grabs the round manager
+        TopItem = gameObject;
     }
 
     /// <summary>
@@ -60,6 +84,21 @@ public class ItemManager : MonoBehaviour
     /// </summary>
     private void Update()
     {
+        if (BoostTimer > 0)
+        {
+            BoostTimer -= Time.deltaTime;
+            if (BoostTimer <= 0)
+                GetComponent<Movement>().temp_speed /= BoostPower;
+        }
+
+        if (ShieldTimer > 0)
+        {
+            ShieldTimer -= Time.deltaTime;
+            ShieldImage.color = new Color(ShieldImage.color.r, ShieldImage.color.g, ShieldImage.color.b, Mathf.Clamp(ShieldTimer/2,0,0.5f));
+            if (ShieldTimer <= 0)
+                Shielded = false;
+        }
+
         if (buying && items.Count > 0) //if selling and is possible to sell
         {
             buytimer += Time.deltaTime;
@@ -94,29 +133,32 @@ public class ItemManager : MonoBehaviour
     /// <returns></returns>
     public bool AddItem(StoreItem item)
     {
-        if (item.group == "Power_Up")
+        if (item.group == "Power_Up" && heldPU == Power_Ups.Empty)
         {
+            //Debug.Log("grabbed PU");
+            heldPU = (Power_Ups)(item.index - 16);
 
+            if (player_controlled)
+            {
+                Debug.Log(heldPU + "_icon");
+                PUIcon.enabled = true;
+                PUIcon.sprite = Resources.Load<Sprite>(heldPU + "_icon");
+            }
+            return true;
         }
         else if (items.Count < maxItems)//checks to see if cart is full
         {
             items.Add(item);
             Debug.Log("item count: "+items.Count);
-            switch (items.Count)//sets the cart image with random rotation
-            {
-                case 1:
-                    bottom.transform.Rotate(Vector3.back * Random.Range(0, 360));
-                    bottom.sprite = item.image;
-                    break;
-                case 2:
-                    mid.transform.Rotate(Vector3.back * Random.Range(0, 360));
-                    mid.sprite = item.image;
-                    break;
-                case 3:
-                    top.transform.Rotate(Vector3.back * Random.Range(0, 360));
-                    top.sprite = item.image;
-                    break;
-            }
+            if (items.Count == 1)
+                CartItem.transform.position = new Vector3(0, 1.6f,-0.05f);
+            else if (items.Count == 2)
+                CartItem.transform.position = new Vector3(0, 0, -0.05f);
+
+            CartItem.transform.Rotate(Vector3.back * Random.Range(0, 360));
+            CartItem.GetComponent<SpriteRenderer>().sprite = item.image;
+
+            TopItem = Instantiate(CartItem, TopItem.transform);
             return true;
         }
         return false;
@@ -133,7 +175,6 @@ public class ItemManager : MonoBehaviour
             droppeditem.GetComponent<ItemDispenser>().item_index = item;
             Instantiate(droppeditem, transform.position, transform.rotation);
         }
-
     }
 
     /// <summary>
@@ -142,20 +183,59 @@ public class ItemManager : MonoBehaviour
     /// <returns></returns>
     public StoreItem RemoveTop()
     {
-        switch (items.Count)
-        {
-            case 1:
-                bottom.sprite = null;
-                break;
-            case 2:
-                mid.sprite = null;
-                break;
-            case 3:
-                top.sprite = null;
-                break;
-        }
+        GameObject temp = TopItem.transform.parent.gameObject;
+        Destroy(TopItem);
+        TopItem = temp;
+
         StoreItem item = items[items.Count - 1];
         items.Remove(item);
         return item;
+    }
+
+    public void UsePowerup()
+    {
+        if(player_controlled && heldPU != Power_Ups.Empty)
+        {
+            switch (heldPU)
+            {
+                case Power_Ups.Boost:
+                    BoostTimer = BoostDuration;
+                    GetComponent<Movement>().temp_speed *= BoostPower;
+                    break;
+                case Power_Ups.Shield:
+                    ShieldTimer = ShieldDuration;
+                    Shielded = true;
+                    break;
+                case Power_Ups.Grabber:
+                    UseGrabber();
+                    break;
+                case Power_Ups.Scanner:
+                    break;
+            }
+            heldPU = Power_Ups.Empty;
+            PUIcon.enabled = false;
+        }
+    }
+
+    public void UseGrabber()
+    {
+        Debug.Log("Looking for grab targets");
+        Collider2D[] nearobj = Physics2D.OverlapCircleAll(transform.position, GrabRange);
+        foreach(var obj in nearobj)
+        {
+            if (obj.tag == "Player" && obj.gameObject != gameObject)
+            {
+                Debug.Log("Found Target");
+
+                if (obj.GetComponent<ItemManager>().items.Count > 0)
+                {
+                    Debug.Log("grabber sent");
+                    Grabber.GetComponent<GrabberManager>().Target = obj.transform;
+                    Grabber.GetComponent<GrabberManager>().User = transform;
+                    Instantiate(Grabber);
+                    break;
+                }
+            }
+        }
     }
 }
