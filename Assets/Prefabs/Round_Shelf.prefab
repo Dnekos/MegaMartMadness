@@ -159,8 +159,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   item_index: 16
   filled: 1
-  filledimage: {fileID: 21300000, guid: 4198d91add8417d4fa7cf17f46a5f953, type: 3}
-  emptyimage: {fileID: 21300000, guid: d1a97050c23ec5041903f3cc1134f358, type: 3}
+  filledimage: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  emptyimage: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
 --- !u!58 &3148626217975732612
 CircleCollider2D:
   m_ObjectHideFlags: 0
