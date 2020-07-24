@@ -57,7 +57,7 @@ public class EnemyMovement : MonoBehaviour
                 Debug.Log("ended path");
                 if (target.target.tag == "Shelf")
                     inventory.grab = 1;
-            }
+                target.target = null;
         }
         else
         {
