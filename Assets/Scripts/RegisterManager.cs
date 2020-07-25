@@ -14,6 +14,5 @@ public class RegisterManager : MonoBehaviour
     {
         if (collision.tag == "Player")
             collision.gameObject.GetComponent<ItemManager>().atRegister = false;
-
     }
 }

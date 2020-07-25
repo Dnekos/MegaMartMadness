@@ -11,13 +11,19 @@ public class ItemDispenser : MonoBehaviour
     [SerializeField]
     public bool filled = false;
 
+    SpriteRenderer obj;
     [SerializeField]
     Sprite filledimage;
     [SerializeField]
     Sprite emptyimage;
 
+    [Header("Debug")]
+    [SerializeField]
+    int HeldItemID = -1;
+
     private void Start()
     {
+        obj = GetComponentInParent<SpriteRenderer>();
         if (item_index != 0)//if stocked, show that
         {
             stocked_item = new StoreItem(item_index);
@@ -26,10 +32,10 @@ public class ItemDispenser : MonoBehaviour
             {
                 filledimage = stocked_item.image;
             }
-            gameObject.GetComponent<SpriteRenderer>().sprite = filledimage;
+            obj.sprite = filledimage;
         }
         else
-            gameObject.GetComponent<SpriteRenderer>().sprite = emptyimage;
+            obj.sprite = emptyimage;
     }
 
     /// <summary>
@@ -38,10 +44,10 @@ public class ItemDispenser : MonoBehaviour
     /// <param name="collision"></param>
     private void OnTriggerStay2D(Collider2D collision)
     {
-        Movement player = collision.GetComponent<Movement>();//grab Movement data from collision
-        if (collision.tag == "Player" && filled && player.grab == 1) //if collision is with a player & grab is held down
+        ItemManager player = collision.GetComponent<ItemManager>();//grab Movement data from collision
+        if (collision.tag == "Player" && filled && (player.grab == 1)) //if collision is with a player & grab is held down
         {
-            if (collision.GetComponent<ItemManager>().AddItem(stocked_item))
+            if (player.AddItem(stocked_item))
             {
                 filled = false;
                 Debug.Log("grabbed");
@@ -50,7 +56,7 @@ public class ItemDispenser : MonoBehaviour
                 if (emptyimage == null)
                     Destroy(gameObject);
                 else //else, show the empty sprite
-                    gameObject.GetComponent<SpriteRenderer>().sprite = emptyimage;
+                    obj.sprite = emptyimage;
             }
         }
     }
@@ -62,9 +68,18 @@ public class ItemDispenser : MonoBehaviour
     public void FillShelf(int newIndex)
     {
         Debug.Log("shelf filled: " + newIndex);
-        item_index = newIndex;
+        if (HeldItemID == -1)
+            item_index = newIndex;
+        else
+            item_index = HeldItemID;
+        
         stocked_item = new StoreItem(item_index);
         filled = true;
-        gameObject.GetComponent<SpriteRenderer>().sprite = filledimage;
+        obj.sprite = filledimage;
+    }
+
+    public string HeldItemGroup()
+    {
+        return stocked_item.group;
     }
 }

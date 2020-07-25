@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Pathfinding;
 
 public enum StatusConditions
 {
@@ -14,17 +15,10 @@ public enum StatusConditions
 
 public class Movement : MonoBehaviour
 {
-    [SerializeField]
-    bool TankControls;
-    [SerializeField]
-    bool ReverseControls;
-
-    [HideInInspector]
+   
     public Vector2 inputVector;
-    [HideInInspector]
-    public float grab = 0;
 
-    //adjustables
+    [Header("Adjustables")]
     [SerializeField]
     float Drag;
     [SerializeField]
@@ -48,6 +42,12 @@ public class Movement : MonoBehaviour
     [HideInInspector]
     public Vector2 temp_translate = Vector2.zero;
 
+    [Header("Alternate Movement")]
+    [SerializeField]
+    bool TankControls;
+    [SerializeField]
+    bool ReverseControls;
+
     Vector2 newspeed;
     float newturnspeed;
     float target_degree;
@@ -63,13 +63,28 @@ public class Movement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        //sets the area just a bit bigger than the collider to default tag
+        GraphUpdateObject bigguo = new GraphUpdateObject(new Bounds(GetComponent<Collider2D>().bounds.center, 
+            GetComponent<Collider2D>().bounds.extents*1.1f));
+        bigguo.modifyTag = true;
+        bigguo.setTag = 0;
+        AstarPath.active.UpdateGraphs(bigguo);
+
+        Debug.Log(GetComponent<Collider2D>().bounds.center + " || " + GetComponent<Collider2D>().bounds.extents * 1.1f);
+
+        //sets the area in the collider to P1 tag
+        GraphUpdateObject guo = new GraphUpdateObject(new Bounds(GetComponent<Collider2D>().bounds.center,
+            GetComponent<Collider2D>().bounds.extents));
+        guo.modifyTag = true;
+        guo.setTag = 1;
+        AstarPath.active.UpdateGraphs(guo);
+
         if (TankControls)
         {
             //gives the speed 
             speed += inputVector.y * (acceleration * Time.deltaTime) * temp_speed;
 
-            if (Mathf.Abs(speed) > maxSpeed)
-                speed = maxSpeed;
+            speed = Mathf.Clamp(speed, maxSpeed * -1, maxSpeed);
             transform.Translate(Vector2.up * speed, Space.Self);
 
             //gives it the drag
@@ -115,9 +130,7 @@ public class Movement : MonoBehaviour
             newturnspeed += inputVector.magnitude * turnAcceleration * Time.deltaTime * temp_speed;
 
             if (fob)
-            {
                 angle = Mathf.LerpAngle(transform.eulerAngles.z, target_degree, newturnspeed);
-            }
             else
                 angle = Mathf.LerpAngle(transform.eulerAngles.z, target_degree + 180, newturnspeed);
             transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
@@ -149,10 +162,7 @@ public class Movement : MonoBehaviour
             float angle;
             newturnspeed += inputVector.magnitude * turnAcceleration * Time.deltaTime * temp_speed;
 
-           // if (reverse == 0)
-                angle = Mathf.LerpAngle(transform.eulerAngles.z, target_degree, newturnspeed);
-           // else
-           //     angle = Mathf.LerpAngle(transform.eulerAngles.z, target_degree + 180, newturnspeed);
+            angle = Mathf.LerpAngle(transform.eulerAngles.z, target_degree, newturnspeed);
             if (inputVector != Vector2.zero)
                 transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
             newturnspeed *= Drag * temp_drag;
