@@ -70,8 +70,11 @@ public class Movement : MonoBehaviour
         bigguo.setTag = 0;
         AstarPath.active.UpdateGraphs(bigguo);
 
+        Debug.Log(GetComponent<Collider2D>().bounds.center + " || " + GetComponent<Collider2D>().bounds.extents * 1.1f);
+
         //sets the area in the collider to P1 tag
-        GraphUpdateObject guo = new GraphUpdateObject(GetComponent<Collider2D>().bounds);
+        GraphUpdateObject guo = new GraphUpdateObject(new Bounds(GetComponent<Collider2D>().bounds.center,
+            GetComponent<Collider2D>().bounds.extents));
         guo.modifyTag = true;
         guo.setTag = 1;
         AstarPath.active.UpdateGraphs(guo);

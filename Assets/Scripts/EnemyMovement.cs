@@ -51,26 +51,22 @@ public class EnemyMovement : MonoBehaviour
                 else*/
             transform.up = ai.desiredVelocity;//sets rotation right
 
-            
+
             if (ai.reachedEndOfPath)//when arrived at a shelf
             {
                 Debug.Log("ended path");
                 if (target.target.tag == "Shelf")
                     inventory.grab = 1;
-                target.target = null;
+                SetDestination();
+            }
         }
         else
         {
-            //finding targets
-            if (inventory.items.Count < inventory.maxItems)
-                //target.target = FindClosestShelf().transform;
-                target.target = FindRandomShelf().transform;
-            else
-                target.target = FindClosestRegister().transform;
+            SetDestination();
         }
     }
 
-    /*public GameObject FindClosestShelf()
+    public GameObject FindClosestShelf()
     {
         GameObject[] gos;
         gos = GameObject.FindGameObjectsWithTag("Shelf");
@@ -88,7 +84,7 @@ public class EnemyMovement : MonoBehaviour
             }
         }
         return closest;
-    }*/
+    }
     public GameObject FindRandomShelf()
     {
         GameObject[] shelves = GameObject.FindGameObjectsWithTag("Shelf");
@@ -118,5 +114,16 @@ public class EnemyMovement : MonoBehaviour
             }
         }
         return closest;
+    }
+
+    public void SetDestination()
+    {
+        //finding targets
+        if (inventory.items.Count == 0)
+            target.target = FindRandomShelf().transform;
+        else if (inventory.items.Count < inventory.maxItems)
+            target.target = FindClosestShelf().transform;
+        else
+            target.target = FindClosestRegister().transform;
     }
 }
