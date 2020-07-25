@@ -17,6 +17,10 @@ public class ItemDispenser : MonoBehaviour
     [SerializeField]
     Sprite emptyimage;
 
+    [Header("Debug")]
+    [SerializeField]
+    int HeldItemID = -1;
+
     private void Start()
     {
         obj = GetComponentInParent<SpriteRenderer>();
@@ -64,9 +68,18 @@ public class ItemDispenser : MonoBehaviour
     public void FillShelf(int newIndex)
     {
         Debug.Log("shelf filled: " + newIndex);
-        item_index = newIndex;
+        if (HeldItemID == -1)
+            item_index = newIndex;
+        else
+            item_index = HeldItemID;
+        
         stocked_item = new StoreItem(item_index);
         filled = true;
         obj.sprite = filledimage;
+    }
+
+    public string HeldItemGroup()
+    {
+        return stocked_item.group;
     }
 }

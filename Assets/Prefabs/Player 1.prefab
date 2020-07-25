@@ -112,6 +112,9 @@ MonoBehaviour:
   ShieldDuration: 5
   Shielded: 0
   ShieldImage: {fileID: 4575543676270766107}
+  ScannerDuration: 15
+  ScannerTimer: 0
+  Scanner: {fileID: 7958729119182645370, guid: f275b93b57c7a204ab2b89d63d7fcf0b, type: 3}
 --- !u!50 &8892949293569957602
 Rigidbody2D:
   serializedVersion: 4

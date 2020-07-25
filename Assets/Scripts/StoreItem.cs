@@ -35,6 +35,8 @@ public class StoreItem
             group = reader[2].ToString();
             point_value = int.Parse(reader[4].ToString());
             image = Resources.Load<Sprite>(reader[1].ToString());
+            if(image == null)
+                Resources.Load<Sprite>("Food_Canned");
         }
 
         // Close connection

@@ -172,6 +172,9 @@ MonoBehaviour:
   ShieldDuration: 5
   Shielded: 0
   ShieldImage: {fileID: 6013068480246347045}
+  ScannerDuration: 15
+  ScannerTimer: 0
+  Scanner: {fileID: 7958729119182645370, guid: f275b93b57c7a204ab2b89d63d7fcf0b, type: 3}
 --- !u!114 &3028782811197128858
 MonoBehaviour:
   m_ObjectHideFlags: 0
