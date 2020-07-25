@@ -7,8 +7,8 @@ public enum Power_Ups
 {
     Empty = -1,
     Grabber,
-    Scanner,
     Boost,
+    Scanner,
     Shield
 }
 
@@ -65,6 +65,7 @@ public class ItemManager : MonoBehaviour
     float GrabRange = 5f;
     [SerializeField]
     GameObject Grabber;
+
     [SerializeField]
     float ShieldDuration = 5f;
     float ShieldTimer = 0f;
@@ -72,6 +73,13 @@ public class ItemManager : MonoBehaviour
     public bool Shielded = false;
     [SerializeField]
     SpriteRenderer ShieldImage;
+
+    [SerializeField]
+    float ScannerDuration = 15f;
+    [HideInInspector]
+    public float ScannerTimer = 0f;
+    [SerializeField]
+    GameObject Scanner;
 
     private void Start()
     {
@@ -90,6 +98,9 @@ public class ItemManager : MonoBehaviour
             if (BoostTimer <= 0)
                 GetComponent<Movement>().temp_speed /= BoostPower;
         }
+
+        if (ScannerTimer > 0)
+            ScannerTimer -= Time.deltaTime;
 
         if (ShieldTimer > 0)
         {
@@ -210,6 +221,7 @@ public class ItemManager : MonoBehaviour
                     UseGrabber();
                     break;
                 case Power_Ups.Scanner:
+                    SpawnScanners();
                     break;
             }
             heldPU = Power_Ups.Empty;
@@ -219,23 +231,29 @@ public class ItemManager : MonoBehaviour
 
     public void UseGrabber()
     {
-        Debug.Log("Looking for grab targets");
         Collider2D[] nearobj = Physics2D.OverlapCircleAll(transform.position, GrabRange);
         foreach(var obj in nearobj)
-        {
             if (obj.tag == "Player" && obj.gameObject != gameObject)
-            {
-                Debug.Log("Found Target");
-
                 if (obj.GetComponent<ItemManager>().items.Count > 0)
                 {
-                    Debug.Log("grabber sent");
                     Grabber.GetComponent<GrabberManager>().Target = obj.transform;
                     Grabber.GetComponent<GrabberManager>().User = transform;
                     Instantiate(Grabber);
                     break;
                 }
-            }
-        }
+    }
+
+    public void SpawnScanners()
+    {
+        ScannerTimer = ScannerDuration;
+        Debug.Log(ScannerTimer + "uifesefljk");
+
+        GameObject[] shelves = GameObject.FindGameObjectsWithTag("Shelf");
+        foreach(var shelf in shelves)
+            if (shelf.GetComponent<ItemDispenser>().HeldItemGroup() == "Rare")
+            {
+                Scanner.GetComponent<ScannerArrow>().shelf = shelf.GetComponent<ItemDispenser>();
+                Instantiate(Scanner, transform);
+            }        
     }
 }
