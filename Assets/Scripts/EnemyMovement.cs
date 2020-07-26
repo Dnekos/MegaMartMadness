@@ -124,6 +124,9 @@ public class EnemyMovement : MonoBehaviour
         else if (inventory.items.Count < inventory.maxItems)
             target.target = FindClosestShelf().transform;
         else
+        {
+            Debug.Log("looking for register");
             target.target = FindClosestRegister().transform;
+        }
     }
 }

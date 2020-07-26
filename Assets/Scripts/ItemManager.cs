@@ -23,6 +23,8 @@ public class ItemManager : MonoBehaviour
     [HideInInspector]
     public List<StoreItem> items = new List<StoreItem>();
 
+    Text currentItemNoTxt;
+
     [HideInInspector]
     public float grab = 0;
 
@@ -85,6 +87,11 @@ public class ItemManager : MonoBehaviour
     {
         round = FindObjectsOfType<RoundManager>()[0];//grabs the round manager
         TopItem = gameObject;
+        if (player_controlled)
+        {
+            currentItemNoTxt = gameObject.GetComponentsInChildren<Text>()[0];
+            gameObject.GetComponentsInChildren<Text>()[1].text = "/" + maxItems;
+        }
     }
 
     /// <summary>
@@ -92,6 +99,9 @@ public class ItemManager : MonoBehaviour
     /// </summary>
     private void Update()
     {
+        if (player_controlled)
+            currentItemNoTxt.text = items.Count.ToString();
+
         if (BoostTimer > 0)
         {
             BoostTimer -= Time.deltaTime;
@@ -162,7 +172,12 @@ public class ItemManager : MonoBehaviour
             items.Add(item);
             Debug.Log("item count: "+items.Count);
             if (items.Count == 1)
-                CartItem.transform.position = new Vector3(0, 1.6f,-0.05f);
+            {
+                if (player_controlled)
+                    CartItem.transform.position = new Vector3(0, 1.6f, -0.05f);
+                else
+                    CartItem.transform.position = new Vector3(0, 0.6f, -0.05f);
+            }
             else if (items.Count == 2)
                 CartItem.transform.position = new Vector3(0, 0, -0.05f);
 
