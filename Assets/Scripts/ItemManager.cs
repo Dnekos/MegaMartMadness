@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Pathfinding;
 
 public enum Power_Ups
 {
@@ -55,7 +56,8 @@ public class ItemManager : MonoBehaviour
     [Header("PowerUps")]
     [SerializeField]
     Image PUIcon;
-    Power_Ups heldPU = Power_Ups.Empty;
+    [HideInInspector]
+    public Power_Ups heldPU = Power_Ups.Empty;
 
     [SerializeField]
     float BoostDuration = 3f;
@@ -63,8 +65,7 @@ public class ItemManager : MonoBehaviour
     [SerializeField]
     float BoostPower = 1.5f;
 
-    [SerializeField]
-    float GrabRange = 5f;
+    public float GrabRange = 5f;
     [SerializeField]
     GameObject Grabber;
 
@@ -106,7 +107,12 @@ public class ItemManager : MonoBehaviour
         {
             BoostTimer -= Time.deltaTime;
             if (BoostTimer <= 0)
-                GetComponent<Movement>().temp_speed /= BoostPower;
+            {
+                if (player_controlled)
+                    GetComponent<Movement>().temp_speed /= BoostPower;
+                else
+                    GetComponent<AIPath>().maxSpeed /= BoostPower;
+            }
         }
 
         if (ScannerTimer > 0)
@@ -226,7 +232,10 @@ public class ItemManager : MonoBehaviour
             {
                 case Power_Ups.Boost:
                     BoostTimer = BoostDuration;
-                    GetComponent<Movement>().temp_speed *= BoostPower;
+                    if (player_controlled)
+                        GetComponent<Movement>().temp_speed *= BoostPower;
+                    else
+                        GetComponent<AIPath>().maxSpeed *= BoostPower;
                     break;
                 case Power_Ups.Shield:
                     ShieldTimer = ShieldDuration;
@@ -246,23 +255,23 @@ public class ItemManager : MonoBehaviour
 
     public void UseGrabber()
     {
-        Collider2D[] nearobj = Physics2D.OverlapCircleAll(transform.position, GrabRange);
-        foreach(var obj in nearobj)
-            if (obj.tag == "Player" && obj.gameObject != gameObject)
-                if (obj.GetComponent<ItemManager>().items.Count > 0)
-                {
-                    Grabber.GetComponent<GrabberManager>().Target = obj.transform;
-                    Grabber.GetComponent<GrabberManager>().User = transform;
-                    Instantiate(Grabber);
-                    break;
-                }
+        Collider2D[] nearobj = Physics2D.OverlapCircleAll(transform.position, GrabRange,9);
+        foreach (var obj in nearobj)
+            if (obj.gameObject != gameObject && obj.GetComponent<ItemManager>().items.Count > 0)
+            {
+                Grabber.GetComponent<GrabberManager>().Target = obj.transform;
+                Grabber.GetComponent<GrabberManager>().User = transform;
+                Instantiate(Grabber);
+                break;
+            }
     }
 
     public void SpawnScanners()
     {
-        ScannerTimer = ScannerDuration;
-        Debug.Log(ScannerTimer + "uifesefljk");
+        if (!player_controlled)
+            return;
 
+        ScannerTimer = ScannerDuration;
         GameObject[] shelves = GameObject.FindGameObjectsWithTag("Shelf");
         foreach(var shelf in shelves)
             if (shelf.GetComponent<ItemDispenser>().HeldItemGroup() == "Rare")

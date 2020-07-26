@@ -6,14 +6,19 @@ using System.Linq;
 
 public class EnemyMovement : MonoBehaviour
 {
-    public AIDestinationSetter target;
-    public AIPath ai;
-    public Seeker Thepath;
-    public ItemManager inventory;
+    AIDestinationSetter DestinationSetter;
+    AIPath ai;
+    Seeker Thepath;
+    ItemManager inventory;
     public int pathtag;
 
     private void Start()
     {
+        DestinationSetter = GetComponent<AIDestinationSetter>();
+        ai = GetComponent<AIPath>();
+        Thepath = GetComponent<Seeker>();
+        inventory = GetComponent<ItemManager>();
+
         //adding the tag to seeker, so that it knows it can walk on itself
         //|= is a bitmask version of +=, no idea why
         Thepath.traversableTags |= pathtag;
@@ -22,6 +27,9 @@ public class EnemyMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (inventory.heldPU != Power_Ups.Empty)
+            UsePowerups();
+
         //sets the area just a bit bigger than the seeker to default tag
         GraphUpdateObject bigguo = new GraphUpdateObject(new Bounds(transform.position, 
             new Vector3(ai.radius, ai.radius) * 1.1f));
@@ -55,18 +63,16 @@ public class EnemyMovement : MonoBehaviour
             if (ai.reachedEndOfPath)//when arrived at a shelf
             {
                 Debug.Log("ended path");
-                if (target.target.tag == "Shelf")
+                if (DestinationSetter.target.tag == "Shelf")
                     inventory.grab = 1;
                 SetDestination();
             }
         }
         else
-        {
             SetDestination();
-        }
     }
 
-    public GameObject FindClosestShelf()
+    private GameObject FindClosestShelf()
     {
         GameObject[] gos;
         gos = GameObject.FindGameObjectsWithTag("Shelf");
@@ -85,7 +91,7 @@ public class EnemyMovement : MonoBehaviour
         }
         return closest;
     }
-    public GameObject FindRandomShelf()
+    private GameObject FindRandomShelf()
     {
         GameObject[] shelves = GameObject.FindGameObjectsWithTag("Shelf");
         GameObject targetShelf = shelves[Random.Range(0, shelves.Length)];
@@ -95,8 +101,7 @@ public class EnemyMovement : MonoBehaviour
         }
         return targetShelf;
     }
-
-    public GameObject FindClosestRegister()
+    private GameObject FindClosestRegister()
     {
         GameObject[] gos;
         gos = GameObject.FindGameObjectsWithTag("Register");
@@ -116,17 +121,28 @@ public class EnemyMovement : MonoBehaviour
         return closest;
     }
 
-    public void SetDestination()
+    private void SetDestination()
     {
         //finding targets
         if (inventory.items.Count == 0)
-            target.target = FindRandomShelf().transform;
+            DestinationSetter.target = FindRandomShelf().transform;
         else if (inventory.items.Count < inventory.maxItems)
-            target.target = FindClosestShelf().transform;
+            DestinationSetter.target = FindClosestShelf().transform;
         else
         {
             Debug.Log("looking for register");
-            target.target = FindClosestRegister().transform;
+            DestinationSetter.target = FindClosestRegister().transform;
         }
+    }
+
+    private void UsePowerups()
+    {
+        if (inventory.heldPU == Power_Ups.Grabber)
+        {
+            if (Physics2D.OverlapCircleAll(transform.position, inventory.GrabRange, 9).Length != 0)
+                inventory.UsePowerup();
+        }
+        else
+            inventory.UsePowerup();
     }
 }

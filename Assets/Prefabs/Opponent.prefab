@@ -165,6 +165,7 @@ MonoBehaviour:
   buying: 0
   p_index: 0
   PUIcon: {fileID: 0}
+  heldPU: -1
   BoostDuration: 3
   BoostPower: 1.5
   GrabRange: 5
@@ -187,10 +188,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 478c6f7eec3bd4f4fa26470573e1dca1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 3028782811197128867}
-  ai: {fileID: 3028782811197128862}
-  Thepath: {fileID: 3028782811197128863}
-  inventory: {fileID: 3028782811197128859}
   pathtag: 4
 --- !u!70 &3028782811197128852
 CapsuleCollider2D:
