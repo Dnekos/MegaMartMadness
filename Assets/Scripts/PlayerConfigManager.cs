@@ -5,11 +5,22 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
+public enum Stages
+{
+    StageOne = 1,
+    StageTwo,
+    StageThree,
+    StageFour
+}
+
 public class PlayerConfigManager : MonoBehaviour
 {
     private List<PlayerConfiguration> playerConfigs;
     [SerializeField]
     int maxPlayers = 4;
+
+    [SerializeField]
+    Stages NextStage;
 
     public static PlayerConfigManager Instance { get; private set; }
 
@@ -35,7 +46,7 @@ public class PlayerConfigManager : MonoBehaviour
     {
         playerConfigs[index].isReady = true;
         if(playerConfigs.All(p => p.isReady == true))
-            SceneManager.LoadScene("StageOne");
+            SceneManager.LoadScene((int)NextStage);
     }
     public void HandlePlayerJoin(PlayerInput pi)
     {
