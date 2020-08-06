@@ -350,6 +350,14 @@ public class @PlayerControl : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Back"",
+                    ""type"": ""Button"",
+                    ""id"": ""7cf1a983-2d6e-4d05-8d9d-2b28345f2f50"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -421,6 +429,17 @@ public class @PlayerControl : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""ce2440ff-73cd-476c-990d-0e96ee0c19b9"",
+                    ""path"": ""<Gamepad>/dpad"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""aac9f846-9e54-48bb-8c34-73286e604953"",
                     ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
@@ -438,6 +457,50 @@ public class @PlayerControl : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""KeyboardAndMouse"",
                     ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1cdc3cea-dfcb-4721-97c6-ee073600e0b0"",
+                    ""path"": ""<Keyboard>/j"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardAndMouse"",
+                    ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""596e0eff-5363-4c7a-87fc-309e278c2705"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardAndMouse"",
+                    ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ded7ca5d-6b22-4035-9f38-a0e28ab39790"",
+                    ""path"": ""<Keyboard>/k"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Back"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1be2998b-f860-4452-b2e4-d8403183297d"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Back"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -487,6 +550,7 @@ public class @PlayerControl : IInputActionCollection, IDisposable
         m_Menus = asset.FindActionMap("Menus", throwIfNotFound: true);
         m_Menus_Move1 = m_Menus.FindAction("Move1", throwIfNotFound: true);
         m_Menus_Select = m_Menus.FindAction("Select", throwIfNotFound: true);
+        m_Menus_Back = m_Menus.FindAction("Back", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -619,12 +683,14 @@ public class @PlayerControl : IInputActionCollection, IDisposable
     private IMenusActions m_MenusActionsCallbackInterface;
     private readonly InputAction m_Menus_Move1;
     private readonly InputAction m_Menus_Select;
+    private readonly InputAction m_Menus_Back;
     public struct MenusActions
     {
         private @PlayerControl m_Wrapper;
         public MenusActions(@PlayerControl wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move1 => m_Wrapper.m_Menus_Move1;
         public InputAction @Select => m_Wrapper.m_Menus_Select;
+        public InputAction @Back => m_Wrapper.m_Menus_Back;
         public InputActionMap Get() { return m_Wrapper.m_Menus; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -640,6 +706,9 @@ public class @PlayerControl : IInputActionCollection, IDisposable
                 @Select.started -= m_Wrapper.m_MenusActionsCallbackInterface.OnSelect;
                 @Select.performed -= m_Wrapper.m_MenusActionsCallbackInterface.OnSelect;
                 @Select.canceled -= m_Wrapper.m_MenusActionsCallbackInterface.OnSelect;
+                @Back.started -= m_Wrapper.m_MenusActionsCallbackInterface.OnBack;
+                @Back.performed -= m_Wrapper.m_MenusActionsCallbackInterface.OnBack;
+                @Back.canceled -= m_Wrapper.m_MenusActionsCallbackInterface.OnBack;
             }
             m_Wrapper.m_MenusActionsCallbackInterface = instance;
             if (instance != null)
@@ -650,6 +719,9 @@ public class @PlayerControl : IInputActionCollection, IDisposable
                 @Select.started += instance.OnSelect;
                 @Select.performed += instance.OnSelect;
                 @Select.canceled += instance.OnSelect;
+                @Back.started += instance.OnBack;
+                @Back.performed += instance.OnBack;
+                @Back.canceled += instance.OnBack;
             }
         }
     }
@@ -686,5 +758,6 @@ public class @PlayerControl : IInputActionCollection, IDisposable
     {
         void OnMove1(InputAction.CallbackContext context);
         void OnSelect(InputAction.CallbackContext context);
+        void OnBack(InputAction.CallbackContext context);
     }
 }

@@ -5,19 +5,32 @@ using UnityEngine.UI;
 
 public class SetupMenuController : MonoBehaviour
 {
-    private int PlayerIndex;
+    public int PlayerIndex;
     [SerializeField]
     Text titleText;
     [SerializeField]
     Button readyButton;
 
-    public void SetPlayerindex(int pi)
+    float ignoreImputtime = 1.5f;
+    bool InputEnabled = false;
+
+    public void Activate()
     {
-        PlayerIndex = pi;
-        titleText.text = "Player " + (pi + 1);
+        GetComponentInChildren<RectMask2D>().gameObject.SetActive(false);
+        ignoreImputtime = Time.time + ignoreImputtime;
     }
+    private void Update()
+    {
+        if (Time.time > ignoreImputtime && ignoreImputtime != 1.5f)
+            InputEnabled = true;
+    }
+
+
     public void ReadyPlayer()
     {
+        if (!InputEnabled)
+            return;
+
         PlayerConfigManager.Instance.ReadyPlayer(PlayerIndex);
         readyButton.gameObject.SetActive(false);
     }

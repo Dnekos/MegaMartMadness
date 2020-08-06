@@ -296,7 +296,7 @@ MonoBehaviour:
   points: []
   convex: 1
   minBoundsHeight: 1
-  penaltyDelta: 200
+  penaltyDelta: 300
   modifyWalkability: 0
   setWalkability: 0
   applyOnStart: 1
