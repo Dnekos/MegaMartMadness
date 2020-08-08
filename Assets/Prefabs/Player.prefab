@@ -105,6 +105,7 @@ MonoBehaviour:
   buying: 0
   p_index: 0
   PUIcon: {fileID: 6289315060698603988}
+  heldPU: -1
   BoostDuration: 3
   BoostPower: 1.5
   GrabRange: 20

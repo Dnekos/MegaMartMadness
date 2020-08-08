@@ -34,4 +34,13 @@ public class SetupMenuController : MonoBehaviour
         PlayerConfigManager.Instance.ReadyPlayer(PlayerIndex);
         readyButton.gameObject.SetActive(false);
     }
+ 
+    public void DisconnectPlayer()
+    {
+        if (!InputEnabled)
+            return;
+
+        Debug.Log(PlayerIndex);
+        PlayerConfigManager.Instance.DisconnectPlayer(PlayerIndex);
+    }
 }

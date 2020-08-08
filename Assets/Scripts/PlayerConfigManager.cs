@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem.UI;
+using UnityEngine.UI;
 
 public enum Stages
 {
@@ -21,6 +22,12 @@ public class PlayerConfigManager : MonoBehaviour
 
     [SerializeField]
     Stages NextStage;
+
+    [SerializeField]
+    GameObject LevelMenu;
+    [SerializeField]
+    MultiplayerEventSystem P1Event;
+
 
     public static PlayerConfigManager Instance { get; private set; }
 
@@ -45,9 +52,27 @@ public class PlayerConfigManager : MonoBehaviour
     public void ReadyPlayer (int index)
     {
         playerConfigs[index].isReady = true;
-        if(playerConfigs.All(p => p.isReady == true))
-            SceneManager.LoadScene((int)NextStage);
+        if (playerConfigs.All(p => p.isReady == true))
+        {
+            //SceneManager.LoadScene((int)NextStage);
+            LevelMenu.SetActive(true);
+            P1Event.playerRoot = LevelMenu;
+
+            P1Event.SetSelectedGameObject(LevelMenu.GetComponentInChildren<Button>().gameObject);
+            /*foreach (MultiplayerEventSystem player in GameObject.FindObjectsOfType<MultiplayerEventSystem>())
+            {
+                player.SetSelectedGameObject(LevelMenu.GetComponentInChildren<Button>().gameObject);
+            }*/
+        }
     }
+
+    public void DisconnectPlayer(int index)
+    {
+        Debug.Log(playerConfigs[index].isReady);
+        playerConfigs[index].theInput.user.UnpairDevicesAndRemoveUser();
+        playerConfigs.RemoveAt(index);
+    }
+
     public void HandlePlayerJoin(PlayerInput pi)
     {
         Debug.Log("Player " + pi.playerIndex + " Joined");

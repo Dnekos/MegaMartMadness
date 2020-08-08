@@ -11,7 +11,7 @@ public class ObstacleTrigger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Player")
+        if (collision.tag == "Player" && collision.GetComponent<Movement>())
         {
             Movement mover = collision.GetComponent<Movement>();
             switch (ObstacleType)
@@ -37,7 +37,7 @@ public class ObstacleTrigger : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.tag == "Player")
+        if (collision.tag == "Player" && collision.GetComponent<Movement>())
         {
             Movement mover = collision.GetComponent<Movement>();
             switch (ObstacleType)
