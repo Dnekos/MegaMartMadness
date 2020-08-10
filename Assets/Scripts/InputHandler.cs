@@ -128,7 +128,7 @@ public class InputHandler : MonoBehaviour
         if (inventory != null && game.gameState == GameStates.RoundPlay)
             inventory.grab = context.ReadValue<float>();
         else if (game.gameState == GameStates.RoundEnd)
-            SceneManager.LoadScene(0);
+            SceneManager.LoadScene("PlayerSelect");
     }
 
     /// <summary>

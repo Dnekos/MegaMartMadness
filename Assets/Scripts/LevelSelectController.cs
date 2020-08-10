@@ -38,31 +38,10 @@ public class LevelSelectController : MonoBehaviour
         if (Time.time > ignoreImputtime && ignoreImputtime != 1.5f)
             InputEnabled = true;
     }
-    //void ChangeSelection()
-    //{
-        /*
-        //this whole thing calls the .db file to get the item index. look to StoreItem for an explanation
-        string connection = "URI=file:" + Application.dataPath + "/" + "MegMart.db";
-        IDbConnection dbcon = new SqliteConnection(connection);
-        dbcon.Open();
-        IDbCommand cmnd_read = dbcon.CreateCommand();
-        IDataReader reader;
-        cmnd_read.CommandText = "SELECT * FROM ItemDrops WHERE Catagory = '" + catagory + "' AND Rarity >= 0";//gets only first one
-        Debug.Log("SELECT * FROM ItemDrops WHERE Catagory = " + catagory + " AND Rarity >= 0");
-        //cmnd_read.CommandText = "SELECT * FROM ItemDrops WHERE Catagory = '" +catagory+ "' AND Rarity >= "+Random.Range(0f,1f);
-        reader = cmnd_read.ExecuteReader();
 
-        while (reader.Read())
-        {
-            shelves[shelf_index].FillShelf(int.Parse(reader[0].ToString()));
-            break;
-        }
-        dbcon.Close();
-    */
-  //  }
     public void ChangeSelection(int levelID)
     {
-        //this whole thing calls the .db file to get the item index. look to StoreItem for an explanation
+        //this whole thing calls the .db file to get the level descriptions. look to StoreItem for an explanation
         string connection = "URI=file:" + Application.dataPath + "/" + "MegMart.db";
         IDbConnection dbcon = new SqliteConnection(connection);
         dbcon.Open();
@@ -87,7 +66,7 @@ public class LevelSelectController : MonoBehaviour
             return;
 
         if (levelid == -1)
-            levelid = Random.Range(1, 5);
+            levelid = Random.Range(2, 6);
         SceneManager.LoadScene(levelid);
     }
 }
