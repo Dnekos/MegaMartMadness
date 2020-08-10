@@ -167,8 +167,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 251686af227366f478c66b7e447a9b6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameState: 0
-  roundTime: 180
+  gameState: 2
+  roundTime: 10
   timeToStock: 30
 --- !u!114 &6062199614884402606
 MonoBehaviour:
@@ -189,6 +189,8 @@ MonoBehaviour:
   - {fileID: 5756858632459332454}
   playerPrefab: {fileID: 219958920374280149, guid: 449419030ebf4fa42b989533d92d038a,
     type: 3}
+  enemyPrefab: {fileID: 0}
+  SpawnEnemies: 1
 --- !u!1 &6062199614968829626
 GameObject:
   m_ObjectHideFlags: 0

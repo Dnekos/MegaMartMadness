@@ -10,13 +10,22 @@ public class SetupMenuController : MonoBehaviour
     Text titleText;
     [SerializeField]
     Button readyButton;
+    [SerializeField]
+    GameObject CPUCover;
+    [SerializeField]
+    Text Winstxt;
 
     float ignoreImputtime = 1.5f;
     bool InputEnabled = false;
 
+    private void Awake()
+    {
+        Winstxt.text = PlayerConfigManager.Instance.PlayerWins[PlayerIndex].ToString();
+    }
+
     public void Activate()
     {
-        GetComponentInChildren<RectMask2D>().gameObject.SetActive(false);
+        CPUCover.gameObject.SetActive(false);
         ignoreImputtime = Time.time + ignoreImputtime;
     }
     private void Update()
@@ -39,8 +48,9 @@ public class SetupMenuController : MonoBehaviour
     {
         if (!InputEnabled)
             return;
-
-        Debug.Log(PlayerIndex);
+        
+        CPUCover.gameObject.SetActive(true);
+        Debug.Log("Player "+ PlayerIndex + " disconnected");
         PlayerConfigManager.Instance.DisconnectPlayer(PlayerIndex);
     }
 }

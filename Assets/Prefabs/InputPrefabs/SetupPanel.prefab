@@ -87,6 +87,7 @@ GameObject:
   - component: {fileID: 132683323710156250}
   - component: {fileID: 5550771874945619426}
   - component: {fileID: 5847716396982146711}
+  - component: {fileID: 1161000064099240023}
   m_Layer: 5
   m_Name: DisconnectButton
   m_TagString: Untagged
@@ -205,6 +206,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1161000064099240023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 993700862956516555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates: []
 --- !u!1 &1347363597424851068
 GameObject:
   m_ObjectHideFlags: 0
@@ -627,6 +641,8 @@ MonoBehaviour:
   PlayerIndex: 0
   titleText: {fileID: 6172782030371311455}
   readyButton: {fileID: 6172782031018481899}
+  CPUCover: {fileID: 3623312630426472351}
+  Winstxt: {fileID: 3588411895608886929}
 --- !u!114 &8226203949003751679
 MonoBehaviour:
   m_ObjectHideFlags: 0

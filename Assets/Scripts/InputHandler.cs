@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using static UnityEngine.InputSystem.InputAction;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class InputHandler : MonoBehaviour
 {
@@ -35,6 +36,11 @@ public class InputHandler : MonoBehaviour
 
         //round manager to know current gamestate
         game = FindObjectOfType<RoundManager>();
+    }
+
+    private void OnDestroy()
+    {
+        playerConfig.theInput.onActionTriggered -= DoAction;
     }
 
     /// <summary>
@@ -109,6 +115,8 @@ public class InputHandler : MonoBehaviour
     {
         if (mover != null && game.gameState == GameStates.RoundPlay)
             mover.inputVector = context.ReadValue<Vector2>();
+        else if (game.gameState == GameStates.RoundEnd)
+            mover.inputVector = Vector2.zero;
     }
 
     /// <summary>
@@ -119,6 +127,8 @@ public class InputHandler : MonoBehaviour
     {
         if (inventory != null && game.gameState == GameStates.RoundPlay)
             inventory.grab = context.ReadValue<float>();
+        else if (game.gameState == GameStates.RoundEnd)
+            SceneManager.LoadScene(0);
     }
 
     /// <summary>

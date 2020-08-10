@@ -6,35 +6,28 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
 
-public enum Stages
-{
-    StageOne = 1,
-    StageTwo,
-    StageThree,
-    StageFour
-}
-
 public class PlayerConfigManager : MonoBehaviour
 {
     private List<PlayerConfiguration> playerConfigs;
     [SerializeField]
     int maxPlayers = 4;
-
-    [SerializeField]
-    Stages NextStage;
-
-    [SerializeField]
-    GameObject LevelMenu;
-    [SerializeField]
-    MultiplayerEventSystem P1Event;
-
+    [HideInInspector]
+    public GameObject LevelMenu;
+    public int[] PlayerWins = new int[4];
 
     public static PlayerConfigManager Instance { get; private set; }
 
     private void Awake()
     {
         if (Instance != null)//error checking
-            Debug.Log("trying to make new instances");
+        {
+            Debug.Log("multiple instances of PCM");
+            if (Instance != this)
+            {
+                Debug.Log("deleting new instance of PCM");
+                Destroy(gameObject);
+            }
+        }
         else
         {
             //this allows future scenes to utilize the controllers that are already in 
@@ -54,7 +47,8 @@ public class PlayerConfigManager : MonoBehaviour
         playerConfigs[index].isReady = true;
         if (playerConfigs.All(p => p.isReady == true))
         {
-            //SceneManager.LoadScene((int)NextStage);
+            MultiplayerEventSystem P1Event = GameObject.Find("SetupPanel").GetComponent<MultiplayerEventSystem>();
+
             LevelMenu.SetActive(true);
             P1Event.playerRoot = LevelMenu;
 
@@ -70,6 +64,10 @@ public class PlayerConfigManager : MonoBehaviour
     {
         Debug.Log(playerConfigs[index].isReady);
         playerConfigs[index].theInput.user.UnpairDevicesAndRemoveUser();
+        playerConfigs[index].theInput.DeactivateInput();
+        Destroy(playerConfigs[index].theInput.gameObject);
+
+
         playerConfigs.RemoveAt(index);
     }
 
