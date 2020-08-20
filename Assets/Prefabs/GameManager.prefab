@@ -168,7 +168,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameState: 2
-  roundTime: 10
+  roundTime: 180
   timeToStock: 30
 --- !u!114 &6062199614884402606
 MonoBehaviour:

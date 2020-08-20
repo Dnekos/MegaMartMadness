@@ -22,19 +22,19 @@ public class InitializeLevel : MonoBehaviour
     void Start()
     {
         PlayerConfiguration[] PlayerConfigs = { };
-        try
-        {
-             PlayerConfigs = PlayerConfigManager.Instance.GetPlayerConfigs().ToArray();
-        }
-        catch
-        {
-            SceneManager.LoadScene("PlayerSelect");
-        }
+        
+        //if there are no players, go back to PlayerSelect (mainly here for debugging purposes)
+        try { PlayerConfigs = PlayerConfigManager.Instance.GetPlayerConfigs().ToArray(); }
+        catch { SceneManager.LoadScene("PlayerSelect"); }
+
         for (int i = 0; i < PlayerConfigs.Length;i++)
         {
+            //spawns player object and calls InitializePlayer
             var player = Instantiate(playerPrefab, spawnPoints[i].position, spawnPoints[i].rotation, gameObject.transform);
             player.GetComponent<InputHandler>().InitializePlayer(PlayerConfigs[i]);
-            if (PlayerConfigs.Length > 2)
+            player.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Player_" + i);//sets player sprite;
+
+            if (PlayerConfigs.Length > 2) //sets up camera orientation (splitscreen) based on amount of players
             {
                 if (i < 3)
                     player.GetComponentInChildren<Camera>().rect = new Rect((i % 2) * 0.5f, 0.5f, 0.5f, 0.5f);
@@ -44,10 +44,11 @@ public class InitializeLevel : MonoBehaviour
             else if (PlayerConfigs.Length == 2)
                 player.GetComponentInChildren<Camera>().rect = new Rect((i % 2) * .5f, 0, 0.5f, 1);
         }
-        if (SpawnEnemies)
+        if (SpawnEnemies)//debug if
             for (int i = 3; i > PlayerConfigs.Length - 1; i--)
             {
-                enemyPrefab.GetComponent<EnemyMovement>().pathtag = (1 << (i + 1));
+                enemyPrefab.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Player_" + i);//sets player sprite;
+                enemyPrefab.GetComponent<EnemyMovement>().pathtag = (1 << (i + 1));//pathtags are bitmaps, thus the wonk setting
                 Instantiate(enemyPrefab, spawnPoints[i].position, spawnPoints[i].rotation, gameObject.transform);
             }
     }

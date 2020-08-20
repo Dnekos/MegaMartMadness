@@ -50,8 +50,9 @@ public class InputHandler : MonoBehaviour
     public void InitializePlayer(PlayerConfiguration pc)
     {
         Debug.Log("initialized player " + pc.playerIndex);
+
         playerConfig = pc;
-        playerConfig.theInput.SwitchCurrentActionMap("Gameplay");
+        playerConfig.theInput.SwitchCurrentActionMap("Gameplay");//make sure we dont start in "Menu"
         playerConfig.theInput.onActionTriggered += DoAction;
 
         GetComponent<ItemManager>().p_index = playerConfig.playerIndex;

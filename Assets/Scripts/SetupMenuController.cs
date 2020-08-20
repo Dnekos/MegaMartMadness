@@ -18,23 +18,35 @@ public class SetupMenuController : MonoBehaviour
     float ignoreImputtime = 1.5f;
     bool InputEnabled = false;
 
+    /// <summary>
+    /// sets win star counter
+    /// </summary>
     private void Awake()
     {
         Winstxt.text = PlayerConfigManager.Instance.PlayerWins[PlayerIndex].ToString();
     }
 
+    /// <summary>
+    /// turns of image cover and sets buffer time
+    /// </summary>
     public void Activate()
     {
-        CPUCover.gameObject.SetActive(false);
+        CPUCover.SetActive(false);
         ignoreImputtime = Time.time + ignoreImputtime;
     }
+
+    /// <summary>
+    /// handles a buffer so that the player accidently press a button when connecting the controller
+    /// </summary>
     private void Update()
     {
         if (Time.time > ignoreImputtime && ignoreImputtime != 1.5f)
             InputEnabled = true;
     }
 
-
+    /// <summary>
+    /// calls the ReadyPlayer function
+    /// </summary>
     public void ReadyPlayer()
     {
         if (!InputEnabled)
@@ -44,6 +56,9 @@ public class SetupMenuController : MonoBehaviour
         readyButton.gameObject.SetActive(false);
     }
  
+    /// <summary>
+    /// calls the DisconnectPlayer function
+    /// </summary>
     public void DisconnectPlayer()
     {
         if (!InputEnabled)

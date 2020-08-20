@@ -21,24 +21,33 @@ public class LevelSelectController : MonoBehaviour
     int lastselectedID;
     int currentselectedID;
 
-    float ignoreImputtime = .3f;
+    float ignoreImputtime = .3f;//timer is used to prevent player accidently clicking button during menu transition
     bool InputEnabled = false;
+
+    /// <summary>
+    /// starts input timer
+    /// </summary>
     private void OnEnable()
     {
         ignoreImputtime = Time.time + ignoreImputtime;
-
     }
+
     private void Start()
     {
         GameObject.Find("PlayerConfigManager").GetComponent<PlayerConfigManager>().LevelMenu = gameObject;
         gameObject.SetActive(false);
     }
+
     private void Update()
     {
         if (Time.time > ignoreImputtime && ignoreImputtime != 1.5f)
             InputEnabled = true;
     }
 
+    /// <summary>
+    /// grabs the name/description from .db and displays it
+    /// </summary>
+    /// <param name="levelID"></param>
     public void ChangeSelection(int levelID)
     {
         //this whole thing calls the .db file to get the level descriptions. look to StoreItem for an explanation
@@ -47,7 +56,7 @@ public class LevelSelectController : MonoBehaviour
         dbcon.Open();
         IDbCommand cmnd_read = dbcon.CreateCommand();
         IDataReader reader;
-        cmnd_read.CommandText = "SELECT * FROM LevelDescriptions WHERE ID = "+levelID;//gets only first one
+        cmnd_read.CommandText = "SELECT * FROM LevelDescriptions WHERE ID = " + levelID;//gets only first one
         reader = cmnd_read.ExecuteReader();
 
         while (reader.Read())
@@ -60,12 +69,17 @@ public class LevelSelectController : MonoBehaviour
         dbcon.Close();
     }
 
-   public void LoadLevel(int levelid)
+
+    /// <summary>
+    /// loads the level based on the button's input value
+    /// </summary>
+    /// <param name="levelid"></param>
+    public void LoadLevel(int levelid)
     {
         if (!InputEnabled)
             return;
 
-        if (levelid == -1)
+        if (levelid == -1) //for random button
             levelid = Random.Range(2, 6);
         SceneManager.LoadScene(levelid);
     }

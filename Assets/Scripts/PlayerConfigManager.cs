@@ -21,9 +21,8 @@ public class PlayerConfigManager : MonoBehaviour
     {
         if (Instance != null)//error checking
         {
-            Debug.Log("multiple instances of PCM");
-            if (Instance != this)
-            {
+            if (Instance != this)//deletes the new version of PlayerConfigManager when returning to PLayerSelect after the first time
+            { //TODO: MAKE PLAYERCONFIGMANAGER HAPPEN IN PREVIOUS SCREEN SO THIS IS NOT NEEDED
                 Debug.Log("deleting new instance of PCM");
                 Destroy(gameObject);
             }
@@ -37,29 +36,44 @@ public class PlayerConfigManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// returns the list
+    /// </summary>
+    /// <returns></returns>
     public List<PlayerConfiguration> GetPlayerConfigs()
     {
         return playerConfigs;
     }
 
+    /// <summary>
+    /// sets up
+    /// </summary>
+    /// <param name="index">Player's list index</param>
     public void ReadyPlayer (int index)
     {
         playerConfigs[index].isReady = true;
         if (playerConfigs.All(p => p.isReady == true))
         {
-            MultiplayerEventSystem P1Event = GameObject.Find("SetupPanel").GetComponent<MultiplayerEventSystem>();
-
             LevelMenu.SetActive(true);
-            P1Event.playerRoot = LevelMenu;
 
+            //assigns Player 1 to the level select menu
+            MultiplayerEventSystem P1Event = GameObject.Find("SetupPanel").GetComponent<MultiplayerEventSystem>();
+            P1Event.playerRoot = LevelMenu;
             P1Event.SetSelectedGameObject(LevelMenu.GetComponentInChildren<Button>().gameObject);
-            /*foreach (MultiplayerEventSystem player in GameObject.FindObjectsOfType<MultiplayerEventSystem>())
+
+            foreach (MultiplayerEventSystem player in GameObject.FindObjectsOfType<MultiplayerEventSystem>())
             {
-                player.SetSelectedGameObject(LevelMenu.GetComponentInChildren<Button>().gameObject);
-            }*/
+                if (player.playerRoot == LevelMenu)
+                    continue;//skips Player 1
+                player.SetSelectedGameObject(null); //makes it so that other players can't disconnect during Level Selection
+            }
         }
     }
 
+    /// <summary>
+    /// deactivates user then removes user from the config list
+    /// </summary>
+    /// <param name="index">Player's list index</param>
     public void DisconnectPlayer(int index)
     {
         Debug.Log(playerConfigs[index].isReady);

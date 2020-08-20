@@ -87,8 +87,9 @@ public class ItemManager : MonoBehaviour
     private void Start()
     {
         round = FindObjectsOfType<RoundManager>()[0];//grabs the round manager
-        TopItem = gameObject;
-        if (player_controlled)
+        TopItem = gameObject;//defaults TopItem for parenting stuff
+
+        if (player_controlled)//sets UI
         {
             currentItemNoTxt = gameObject.GetComponentsInChildren<Text>()[0];
             gameObject.GetComponentsInChildren<Text>()[1].text = "/" + maxItems;
@@ -100,13 +101,13 @@ public class ItemManager : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        if (player_controlled)
+        if (player_controlled)//updates UI
             currentItemNoTxt.text = items.Count.ToString();
 
-        if (BoostTimer > 0)
+        if (BoostTimer > 0)//if Boost is active
         {
-            BoostTimer -= Time.deltaTime;
-            if (BoostTimer <= 0)
+            BoostTimer -= Time.deltaTime;//decrease timer
+            if (BoostTimer <= 0)//if boost ending, slow user down
             {
                 if (player_controlled)
                     GetComponent<Movement>().temp_speed /= BoostPower;
@@ -115,20 +116,20 @@ public class ItemManager : MonoBehaviour
             }
         }
 
-        if (ScannerTimer > 0)
+        if (ScannerTimer > 0)//if Scanner active, decrease timer
             ScannerTimer -= Time.deltaTime;
 
-        if (ShieldTimer > 0)
+        if (ShieldTimer > 0)//if Shield active
         {
-            ShieldTimer -= Time.deltaTime;
-            ShieldImage.color = new Color(ShieldImage.color.r, ShieldImage.color.g, ShieldImage.color.b, Mathf.Clamp(ShieldTimer/2,0,0.5f));
-            if (ShieldTimer <= 0)
+            ShieldTimer -= Time.deltaTime;//decrease time
+            ShieldImage.color = new Color(ShieldImage.color.r, ShieldImage.color.g, ShieldImage.color.b, Mathf.Clamp(ShieldTimer/2,0,0.5f));//fade out
+            if (ShieldTimer <= 0)//if ending, set shield off
                 Shielded = false;
         }
 
-        if (buying && items.Count > 0) //if selling and is possible to sell
+        if (buying && items.Count > 0) //if actively buying
         {
-            buytimer += Time.deltaTime;
+            buytimer += Time.deltaTime; //increase buytimer
 
             //makes bar visible and locally unmoving
             healthbar.parent.gameObject.SetActive(true);
@@ -145,9 +146,8 @@ public class ItemManager : MonoBehaviour
                 buytimer = 0;
             }
         }
-        else
+        else//reset values when no longer buying
         {
-            //reset values when no longer selling
             buytimer = 0;
             healthbar.parent.gameObject.SetActive(false);  
         }
@@ -168,7 +168,6 @@ public class ItemManager : MonoBehaviour
             if (player_controlled)
             {
                 Debug.Log(heldPU + "_icon");
-                PUIcon.enabled = true;
                 PUIcon.sprite = Resources.Load<Sprite>(heldPU + "_icon");
             }
             return true;
@@ -177,23 +176,23 @@ public class ItemManager : MonoBehaviour
         {
             items.Add(item);
             Debug.Log("item count: "+items.Count);
-            if (items.Count == 1)
+            if (items.Count == 1)//needed to adjust the first item to the right spot
             {
                 if (player_controlled)
                     CartItem.transform.position = new Vector3(0, 1.6f, -0.05f);
                 else
                     CartItem.transform.position = new Vector3(0, 0.6f, -0.05f);
             }
-            else if (items.Count == 2)
+            else if (items.Count == 2)//subsequent items are parented so they can be at 0
                 CartItem.transform.position = new Vector3(0, 0, -0.05f);
 
-            CartItem.transform.Rotate(Vector3.back * Random.Range(0, 360));
+            CartItem.transform.Rotate(Vector3.back * Random.Range(0, 360));//give it a nice spin
             CartItem.GetComponent<SpriteRenderer>().sprite = item.image;
 
             TopItem = Instantiate(CartItem, TopItem.transform);
             return true;
         }
-        return false;
+        return false;//cart is full, dont update shelf
     }
 
     /// <summary>
@@ -224,9 +223,12 @@ public class ItemManager : MonoBehaviour
         return item;
     }
 
+    /// <summary>
+    /// handles shield and boost initial uses, and redirects for Grabber/Scanner functions
+    /// </summary>
     public void UsePowerup()
     {
-        if(player_controlled && heldPU != Power_Ups.Empty)
+        if(heldPU != Power_Ups.Empty)
         {
             switch (heldPU)
             {
@@ -249,14 +251,16 @@ public class ItemManager : MonoBehaviour
                     break;
             }
             heldPU = Power_Ups.Empty;
-            PUIcon.enabled = false;
+            if (player_controlled)
+                PUIcon.sprite = Resources.Load<Sprite>("empty_icon");
         }
     }
 
     public void UseGrabber()
     {
+        //grabs each tagged collider near user 
         Collider2D[] nearobj = Physics2D.OverlapCircleAll(transform.position, GrabRange,9);
-        foreach (var obj in nearobj)
+        foreach (var obj in nearobj) //filters through to find the first player with items
             if (obj.gameObject != gameObject && obj.GetComponent<ItemManager>().items.Count > 0)
             {
                 Grabber.GetComponent<GrabberManager>().Target = obj.transform;
@@ -268,15 +272,15 @@ public class ItemManager : MonoBehaviour
 
     public void SpawnScanners()
     {
-        if (!player_controlled)
+        if (!player_controlled)//enemies dont need help, so no scanners for them
             return;
 
         ScannerTimer = ScannerDuration;
         GameObject[] shelves = GameObject.FindGameObjectsWithTag("Shelf");
-        foreach(var shelf in shelves)
+        foreach(var shelf in shelves)//spawns a Scanner object for each Rare shelf
             if (shelf.GetComponent<ItemDispenser>().HeldItemGroup() == "Rare")
             {
-                Scanner.GetComponent<ScannerArrow>().shelf = shelf.GetComponent<ItemDispenser>();
+                Scanner.GetComponent<ScannerArrow>().shelf = shelf.GetComponent<ItemDispenser>();//direction to be pointed
                 Instantiate(Scanner, transform);
             }        
     }

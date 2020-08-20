@@ -17,13 +17,13 @@ public class GrabberManager : MonoBehaviour
     void Update()
     {
         transform.position = User.position;
-        transform.up = Target.position - transform.position;// + (transform.right*90);
+        transform.up = Target.position - transform.position;
         float distance = Vector3.Distance(User.position, Target.position) / 4f;
 
-        if (reverse)
+        if (reverse)//going backward
         {
             percentLength -= Time.deltaTime / speed;
-            if (percentLength < 0)
+            if (percentLength < 0)//when returned to player, give them the item then delete
             {
                 if (grabbedItem != null)
                     User.GetComponent<ItemManager>().AddItem(grabbedItem);
@@ -33,13 +33,13 @@ public class GrabberManager : MonoBehaviour
         else//going forward
         {
             percentLength += Time.deltaTime / speed;
-            if (percentLength > 1)//when arrived
+            if (percentLength > 1)//when arrived, remove player item (if possible) and reverse
             {
                 reverse = true;
                 if(!Target.GetComponent<ItemManager>().Shielded)
                     grabbedItem = Target.GetComponent<ItemManager>().RemoveTop();
             }
         }
-        transform.localScale = new Vector3(1, Mathf.Lerp(0, distance, percentLength), 1);
+        transform.localScale = new Vector3(1, Mathf.Lerp(0, distance, percentLength), 1);//sets the length of grabber
     }
 }

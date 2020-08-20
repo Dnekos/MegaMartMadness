@@ -20,10 +20,10 @@ public class ItemDispenser : MonoBehaviour
     [Header("Debug")]
     [SerializeField]
     int HeldItemID = -1;
-
+    
     private void Start()
     {
-        obj = GetComponentInParent<SpriteRenderer>();
+        obj = GetComponentInParent<SpriteRenderer>();//setting variable
         if (item_index != 0)//if stocked, show that
         {
             stocked_item = new StoreItem(item_index);
@@ -34,7 +34,7 @@ public class ItemDispenser : MonoBehaviour
             }
             obj.sprite = filledimage;
         }
-        else
+        else//if not stocked, show empty image
             obj.sprite = emptyimage;
     }
 

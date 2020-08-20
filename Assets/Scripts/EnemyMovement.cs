@@ -14,6 +14,10 @@ public class EnemyMovement : MonoBehaviour
 
     private void Start()
     {
+        //stop logs
+        AstarPath.active.logPathResults = PathLog.None;
+
+        //setting component variables
         DestinationSetter = GetComponent<AIDestinationSetter>();
         ai = GetComponent<AIPath>();
         Thepath = GetComponent<Seeker>();
@@ -24,9 +28,10 @@ public class EnemyMovement : MonoBehaviour
         Thepath.traversableTags |= pathtag;
     }
 
-    // Update is called once per frame
+    // Update used for setting destinations and performing actions
     void Update()
     {
+        //enemy attempts to use powerups as soon as it holds them
         if (inventory.heldPU != Power_Ups.Empty)
             UsePowerups();
 
@@ -43,8 +48,10 @@ public class EnemyMovement : MonoBehaviour
         guo.modifyTag = true;
         guo.setTag = pathtag;
 
+        //updates node tags
         AstarPath.active.UpdateGraphs(guo);
 
+        //grab/buying actions
         inventory.grab = 0;
         if (inventory.atRegister)
             inventory.buying = true;
@@ -63,86 +70,87 @@ public class EnemyMovement : MonoBehaviour
             if (ai.reachedEndOfPath)//when arrived at a shelf
             {
                 Debug.Log("ended path");
-                if (DestinationSetter.target.tag == "Shelf")
+                if (DestinationSetter.target.tag == "Shelf") //if at shelf, grab
                     inventory.grab = 1;
                 SetDestination();
             }
         }
-        else
+        else//basically only happens at the beginning of round, or if something jank happens
             SetDestination();
     }
 
-    private GameObject FindClosestShelf()
+    /// <summary>
+    /// finds closest object based on tag, not the most efficient
+    /// if object contains an ItemDispenser, filters out untagged objects
+    /// </summary>
+    /// <returns></returns>
+    private Transform FindClosestObject(string tag)
     {
         GameObject[] gos;
-        gos = GameObject.FindGameObjectsWithTag("Shelf");
+        gos = GameObject.FindGameObjectsWithTag(tag);
         GameObject closest = null;
         float distance = Mathf.Infinity;
         Vector3 position = transform.position;
         foreach (GameObject go in gos)
         {
+            //checks to see, if it is a shelf, if it is filled, and skips if not
+            try { if (go.GetComponentInParent<ItemDispenser>().filled == false) continue; }
+            catch { };
+
             Vector3 diff = go.transform.position - position;
             float curDistance = diff.sqrMagnitude;
-            if (curDistance < distance && go.GetComponentInParent<ItemDispenser>().filled)
-            {
-                closest = go;
-                distance = curDistance;
-            }
-        }
-        return closest;
-    }
-    private GameObject FindRandomShelf()
-    {
-        GameObject[] shelves = GameObject.FindGameObjectsWithTag("Shelf");
-        GameObject targetShelf = shelves[Random.Range(0, shelves.Length)];
-        while (!targetShelf.GetComponentInParent<ItemDispenser>().filled)
-        {
-            targetShelf = shelves[Random.Range(0, shelves.Length)];
-        }
-        return targetShelf;
-    }
-    private GameObject FindClosestRegister()
-    {
-        GameObject[] gos;
-        gos = GameObject.FindGameObjectsWithTag("Register");
-        GameObject closest = null;
-        float distance = Mathf.Infinity;
-        Vector3 position = transform.position;
-        foreach (GameObject go in gos)
-        {
-            Vector3 diff = go.transform.position - position;
-            float curDistance = diff.sqrMagnitude;
+            
             if (curDistance < distance)
             {
                 closest = go;
                 distance = curDistance;
             }
         }
-        return closest;
+        return closest.transform;
+    }
+    /// <summary>
+    /// finds closest shelf that is filled
+    /// </summary>
+    /// <returns></returns>
+    private Transform FindRandomShelf()
+    {
+        GameObject[] shelves = GameObject.FindGameObjectsWithTag("Shelf");
+        GameObject targetShelf;
+        do
+        {
+            targetShelf = shelves[Random.Range(0, shelves.Length)];
+        } while (!targetShelf.GetComponentInParent<ItemDispenser>().filled);
+        return targetShelf.transform;
     }
 
+    /// <summary>
+    /// calls appropriate 'Find' function, based on inventory count
+    /// </summary>
     private void SetDestination()
     {
-        //finding targets
+        //first shelf is random
         if (inventory.items.Count == 0)
             DestinationSetter.target = FindRandomShelf().transform;
-        else if (inventory.items.Count < inventory.maxItems)
-            DestinationSetter.target = FindClosestShelf().transform;
-        else
+        else if (inventory.items.Count < inventory.maxItems) //sequential shelves are based on distance
+            DestinationSetter.target = FindClosestObject("Shelf");
+        else //when filled, return to register
         {
             Debug.Log("looking for register");
-            DestinationSetter.target = FindClosestRegister().transform;
+            DestinationSetter.target = FindClosestObject("Register");
         }
     }
 
+    /// <summary>
+    /// calls inventory.UsePowerup, checks if targets are in range for Grabber first
+    /// </summary>
     private void UsePowerups()
     {
         if (inventory.heldPU == Power_Ups.Grabber)
-        {
+        { //if powerup is Grabber, checks each frame if a player is in range, 9 is the player layermask
             if (Physics2D.OverlapCircleAll(transform.position, inventory.GrabRange, 9).Length != 0)
                 inventory.UsePowerup();
         }
-        else
+        else //if not grabber, uses instantly
             inventory.UsePowerup();
     }
 }
